@@ -1,5 +1,5 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import initStripe from '../../../../src/lib/billing/initStripe'
 import { v4 } from 'uuid'
 import PricingPlanFactory from '../../../fixtures/PricingPlanFactory'
@@ -19,10 +19,10 @@ describe('Webhook service - invoice finalized', () => {
     const product = (await stripe.products.list()).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
     const invoice = (await stripe.invoices.list()).data[0]
 
-    organisation.pricingPlan.stripeCustomerId = invoice.customer as string
+    organization.pricingPlan.stripeCustomerId = invoice.customer as string
     await em.flush()
 
     const payload = JSON.stringify({
@@ -50,6 +50,6 @@ describe('Webhook service - invoice finalized', () => {
       .send(payload)
       .expect(204)
 
-    expect(sendMock).toHaveBeenCalledWith(new PlanInvoice(organisation, invoice).getConfig())
+    expect(sendMock).toHaveBeenCalledWith(new PlanInvoice(organization, invoice).getConfig())
   })
 })

@@ -1,19 +1,19 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 
 describe('Billing service - usage', () => {
   it.each(userPermissionProvider())('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation] = await createOrganisationAndGame({}, {})
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {})
+    const [token] = await createUserAndToken({ type }, organization)
 
     const limit = 10000
     const used = 999
 
-    organisation.pricingPlan.pricingPlan.playerLimit = limit
-    const players = await new PlayerFactory(organisation.games.getItems()).many(used)
+    organization.pricingPlan.pricingPlan.playerLimit = limit
+    const players = await new PlayerFactory(organization.games.getItems()).many(used)
     await em.persistAndFlush(players)
 
     const res = await request(app)
@@ -27,7 +27,7 @@ describe('Billing service - usage', () => {
         used
       })
     } else {
-      expect(res.body).toStrictEqual({ message: 'You do not have permissions to view the organisation pricing plan usage' })
+      expect(res.body).toStrictEqual({ message: 'You do not have permissions to view the organization pricing plan usage' })
     }
   })
 })

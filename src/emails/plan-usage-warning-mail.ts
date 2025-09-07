@@ -1,8 +1,8 @@
-import Organisation from '../entities/organisation'
+import Organization from '../entities/organization'
 import Mail from './mail'
 
 export default class PlanUsageWarning extends Mail {
-  constructor(organisation: Organisation, usage: number, limit: number) {
+  constructor(organization: Organization, usage: number, limit: number) {
     const usagePercentage = Math.floor((usage / limit) * 100)
 
     let subject = `Usage warning: ${usagePercentage}% of your plan limit reached`
@@ -24,7 +24,7 @@ export default class PlanUsageWarning extends Mail {
       `
     }
 
-    super(organisation.email, subject, preheader)
+    super(organization.email, subject, preheader)
 
     this.title = title
     this.mainText = mainText

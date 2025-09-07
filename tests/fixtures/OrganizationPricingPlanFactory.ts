@@ -1,10 +1,10 @@
 import { Factory } from 'hefty'
-import OrganisationPricingPlan from '../../src/entities/organisation-pricing-plan'
+import OrganizationPricingPlan from '../../src/entities/organization-pricing-plan'
 import { randUuid } from '@ngneat/falso'
 
-export default class OrganisationPricingPlanFactory extends Factory<OrganisationPricingPlan> {
+export default class OrganizationPricingPlanFactory extends Factory<OrganizationPricingPlan> {
   constructor() {
-    super(OrganisationPricingPlan)
+    super(OrganizationPricingPlan)
   }
 
   protected definition(): void {

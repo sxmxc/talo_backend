@@ -1,12 +1,12 @@
 import request from 'supertest'
 import UserAccessCode from '../../../../src/entities/user-access-code'
 import UserFactory from '../../../fixtures/UserFactory'
-import OrganisationFactory from '../../../fixtures/OrganisationFactory'
+import OrganizationFactory from '../../../fixtures/OrganizationFactory'
 import InviteFactory from '../../../fixtures/InviteFactory'
 import GameActivity, { GameActivityType } from '../../../../src/entities/game-activity'
 import PricingPlanFactory from '../../../fixtures/PricingPlanFactory'
 import { randEmail, randUserName } from '@ngneat/falso'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 
 describe('User public service - register', () => {
   beforeAll(async () => {
@@ -20,15 +20,15 @@ describe('User public service - register', () => {
 
     const res = await request(app)
       .post('/public/users/register')
-      .send({ email, username, password: 'password', organisationName: 'Talo' })
+      .send({ email, username, password: 'password', organizationName: 'Talo' })
       .expect(200)
 
     expect(res.body.accessToken).toBeTruthy()
     expect(res.body.user.email).toBe(email.toLowerCase())
     expect(res.body.user.username).toBe(username)
     expect(res.body.user.password).not.toBeDefined()
-    expect(res.body.user.organisation.name).toBe('Talo')
-    expect(res.body.user.organisation.games).toEqual([])
+    expect(res.body.user.organization.name).toBe('Talo')
+    expect(res.body.user.organization.games).toEqual([])
   })
 
   it('should not let a user register if the email already exists', async () => {
@@ -38,7 +38,7 @@ describe('User public service - register', () => {
 
     const res = await request(app)
       .post('/public/users/register')
-      .send({ email, username: randUserName(), password: 'password', organisationName: 'Talo' })
+      .send({ email, username: randUserName(), password: 'password', organizationName: 'Talo' })
       .expect(400)
 
     expect(res.body).toStrictEqual({ message: 'Email address is already in use' })
@@ -49,7 +49,7 @@ describe('User public service - register', () => {
 
     await request(app)
       .post('/public/users/register')
-      .send({ email, username: randUserName(), password: 'password', organisationName: 'Talo' })
+      .send({ email, username: randUserName(), password: 'password', organizationName: 'Talo' })
       .expect(200)
 
     const accessCode = await em.getRepository(UserAccessCode).findOne({
@@ -62,8 +62,8 @@ describe('User public service - register', () => {
   })
 
   it('should let a user register with an invite', async () => {
-    const [organisation] = await createOrganisationAndGame()
-    const invite = await new InviteFactory().construct(organisation).one()
+    const [organization] = await createOrganizationAndGame()
+    const invite = await new InviteFactory().construct(organization).one()
     await em.persistAndFlush(invite)
 
     const email = invite.email
@@ -78,8 +78,8 @@ describe('User public service - register', () => {
     expect(res.body.user.email).toBe(email.toLowerCase())
     expect(res.body.user.username).toBe(username)
     expect(res.body.user.password).not.toBeDefined()
-    expect(res.body.user.organisation.id).toBe(organisation.id)
-    expect(res.body.user.organisation.games).toHaveLength(1)
+    expect(res.body.user.organization.id).toBe(organization.id)
+    expect(res.body.user.organization.games).toHaveLength(1)
 
     const activity = await em.getRepository(GameActivity).findOne({
       type: GameActivityType.INVITE_ACCEPTED
@@ -89,8 +89,8 @@ describe('User public service - register', () => {
   })
 
   it('should not let a user register with an invite if the email doesn\'t match', async () => {
-    const organisation = await new OrganisationFactory().one()
-    const invite = await new InviteFactory().construct(organisation).one()
+    const organization = await new OrganizationFactory().one()
+    const invite = await new InviteFactory().construct(organization).one()
     await em.persistAndFlush(invite)
 
     const email = randEmail()
@@ -103,8 +103,8 @@ describe('User public service - register', () => {
   })
 
   it('should not let a user register with a missing invite', async () => {
-    const organisation = await new OrganisationFactory().one()
-    const invite = await new InviteFactory().construct(organisation).one()
+    const organization = await new OrganizationFactory().one()
+    const invite = await new InviteFactory().construct(organization).one()
     await em.persistAndFlush(invite)
 
     const email = randEmail()
@@ -119,7 +119,7 @@ describe('User public service - register', () => {
   it('should not let a user register if their email is invalid', async () => {
     const res = await request(app)
       .post('/public/users/register')
-      .send({ email: 'bleh', username: randUserName(), password: 'password', organisationName: 'Talo' })
+      .send({ email: 'bleh', username: randUserName(), password: 'password', organizationName: 'Talo' })
       .expect(400)
 
     expect(res.body).toStrictEqual({
@@ -134,7 +134,7 @@ describe('User public service - register', () => {
 
     const res = await request(app)
       .post('/public/users/register')
-      .send({ email: randEmail(), username: randUserName(), password: 'password', organisationName: 'Talo' })
+      .send({ email: randEmail(), username: randUserName(), password: 'password', organizationName: 'Talo' })
       .expect(400)
 
     expect(res.body).toStrictEqual({ message: 'Registration is disabled' })
@@ -147,7 +147,7 @@ describe('User public service - register', () => {
 
     const res = await request(app)
       .post('/public/users/register')
-      .send({ email: randEmail(), username: randUserName(), password: 'password', organisationName: 'Talo' })
+      .send({ email: randEmail(), username: randUserName(), password: 'password', organizationName: 'Talo' })
       .expect(400)
 
     expect(res.body).toStrictEqual({ message: 'Registration requires an invitation' })

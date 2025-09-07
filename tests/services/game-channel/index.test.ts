@@ -1,6 +1,6 @@
 import request from 'supertest'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import PlayerAliasFactory from '../../fixtures/PlayerAliasFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import GameChannelFactory from '../../fixtures/GameChannelFactory'
@@ -10,8 +10,8 @@ import { Collection } from '@mikro-orm/core'
 
 describe('Game channel service - index', () => {
   it('should return a list of game channels', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channels = await new GameChannelFactory(game).many(10)
     await em.persistAndFlush(channels)
@@ -40,7 +40,7 @@ describe('Game channel service - index', () => {
   })
 
   it('should not return game channels for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await new GameChannelFactory(game).many(10)
@@ -53,8 +53,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should paginate results when getting channels', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const count = 82
     const channels = await new GameChannelFactory(game).many(count)
@@ -74,8 +74,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should search by channel name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channelsWithName = await new GameChannelFactory(game).state(() => ({ name: 'General chat' })).many(3)
     const channelsWithoutName = await new GameChannelFactory(game).state(() => ({ name: 'Guild chat' })).many(3)
@@ -91,8 +91,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should search by owners', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const playerAlias = await new PlayerAliasFactory(player).state(async () => ({ player, identifier: 'johnny_the_admin' })).one()
@@ -115,8 +115,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should return all players with the member count if the dev data header is sent', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).one()
     channel.members.add(
@@ -136,8 +136,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should not return dev build players in the member count if the dev data header is not sent', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).one()
     channel.members.add(
@@ -156,8 +156,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should mark the last page of channels', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channels = await new GameChannelFactory(game).many(208)
     await em.persistAndFlush(channels)
@@ -175,8 +175,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should return private channels', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const publicChannels = await new GameChannelFactory(game).many(3)
     const privateChannels = await new GameChannelFactory(game).private().many(1)
@@ -192,8 +192,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should filter game channels by prop keys', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).state((channel) => ({
       props: new Collection<GameChannelProp>(channel, [
@@ -216,8 +216,8 @@ describe('Game channel service - index', () => {
   })
 
   it('should filter game channels by prop keys and values', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).state((channel) => ({
       props: new Collection<GameChannelProp>(channel, [

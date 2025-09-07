@@ -2,7 +2,7 @@ import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameFeedbackCategoryFactory from '../../fixtures/GameFeedbackCategoryFactory'
 
@@ -10,8 +10,8 @@ describe('Game feedback service - delete category', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ], 204))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type, emailConfirmed: true }, organization)
 
     const feedbackCategory = await new GameFeedbackCategoryFactory(game).one()
     await em.persistAndFlush(feedbackCategory)
@@ -37,7 +37,7 @@ describe('Game feedback service - delete category', () => {
   })
 
   it('should not delete a feedback category for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const feedbackCategory = await new GameFeedbackCategoryFactory(otherGame).one()
@@ -52,8 +52,8 @@ describe('Game feedback service - delete category', () => {
   })
 
   it('should not delete a non-existent feedback category', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .delete(`/games/${game.id}/game-feedback/categories/99999`)

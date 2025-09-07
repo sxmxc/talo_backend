@@ -18,8 +18,8 @@ async function getUserFromToken(ctx: Context) {
   )
 
   // populate after so the cache doesn't include from circular structures
-  if (!user.organisation.games.isInitialized()) {
-    await em.populate(user, ['organisation.games'])
+  if (!user.organization.games.isInitialized()) {
+    await em.populate(user, ['organization.games'])
   }
 
   return user

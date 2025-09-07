@@ -4,7 +4,7 @@ import { UserType } from '../../../src/entities/user'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerProp from '../../../src/entities/player-prop'
 import { randText, randWord } from '@ngneat/falso'
@@ -14,8 +14,8 @@ describe('Player service - patch', () => {
     UserType.ADMIN,
     UserType.DEV
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const player = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [
@@ -67,8 +67,8 @@ describe('Player service - patch', () => {
   })
 
   it('should delete null player properties', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [
@@ -105,8 +105,8 @@ describe('Player service - patch', () => {
   })
 
   it('should throw an error if props are present but aren\'t an array', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -129,8 +129,8 @@ describe('Player service - patch', () => {
   })
 
   it('should not update a non-existent player\'s properties', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}/players/2313`)
@@ -149,7 +149,7 @@ describe('Player service - patch', () => {
   })
 
   it('should not update a player\'s properties for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({})
 
     const player = await new PlayerFactory([otherGame]).one()
@@ -172,8 +172,8 @@ describe('Player service - patch', () => {
   })
 
   it('should filter out props with no keys', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [])
@@ -206,8 +206,8 @@ describe('Player service - patch', () => {
   })
 
   it('should reject keys starting with META_', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -242,8 +242,8 @@ describe('Player service - patch', () => {
   })
 
   it('should reject props where the key is greater than 128 characters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
 
@@ -270,8 +270,8 @@ describe('Player service - patch', () => {
   })
 
   it('should reject props where the value is greater than 512 characters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
 
@@ -298,8 +298,8 @@ describe('Player service - patch', () => {
   })
 
   it('should de-dupe props and take the latest updates', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [])

@@ -60,9 +60,9 @@ export default class PlayerService extends Service {
 
     const game = await em.getRepository(Game).findOneOrFail(req.ctx.state.game, {
       ...getResultCacheOptions(`post-player-game-${req.ctx.state.game.id}`),
-      populate: ['organisation']
+      populate: ['organization']
     })
-    await checkPricingPlanPlayerLimit(req, game.organisation)
+    await checkPricingPlanPlayerLimit(req, game.organization)
 
     const player = new Player(game)
     if (aliases) {

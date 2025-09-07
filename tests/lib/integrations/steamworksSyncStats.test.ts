@@ -2,7 +2,7 @@ import { IntegrationType } from '../../../src/entities/integration'
 import { GetSchemaForGameResponse, GetUserStatsForGameResponse, syncSteamworksStats } from '../../../src/lib/integrations/steamworks-integration'
 import IntegrationConfigFactory from '../../fixtures/IntegrationConfigFactory'
 import IntegrationFactory from '../../fixtures/IntegrationFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import AxiosMockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import SteamworksIntegrationEvent from '../../../src/entities/steamworks-integration-event'
@@ -17,7 +17,7 @@ describe('Steamworks integration - sync stats', () => {
   const axiosMock = new AxiosMockAdapter(axios)
 
   it('should pull in stats from steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const statDisplayName = randText()
 
@@ -67,7 +67,7 @@ describe('Steamworks integration - sync stats', () => {
   })
 
   it('should update existing stats with the name and default value from steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const statName = 'stat_' + randSlug()
     const statDisplayName = randText()
@@ -107,7 +107,7 @@ describe('Steamworks integration - sync stats', () => {
   })
 
   it('should pull in player stats from steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const statName = 'stat_' + randSlug()
 
@@ -159,7 +159,7 @@ describe('Steamworks integration - sync stats', () => {
   })
 
   it('should not pull in player stats for players that do not exist in steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const player = await new PlayerFactory([game]).withSteamAlias().one()
 
@@ -199,7 +199,7 @@ describe('Steamworks integration - sync stats', () => {
   })
 
   it('should update player stats with the ones from steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const statName = 'stat_' + randSlug()
 
@@ -252,7 +252,7 @@ describe('Steamworks integration - sync stats', () => {
   })
 
   it('should push through player stats that only exist in talo', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const statName = 'stat_' + randSlug()
 
@@ -315,7 +315,7 @@ describe('Steamworks integration - sync stats', () => {
   })
 
   it('should throw if the response stats are not an array', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const config = await new IntegrationConfigFactory().one()
     const integration = await new IntegrationFactory().construct(IntegrationType.STEAMWORKS, game, config).one()

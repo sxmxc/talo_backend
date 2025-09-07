@@ -3,14 +3,14 @@ import PlayerFactory from '../../fixtures/PlayerFactory'
 import GameStatFactory from '../../fixtures/GameStatFactory'
 import PlayerGameStatFactory from '../../fixtures/PlayerGameStatFactory'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import { rand } from '@ngneat/falso'
 
 describe('Player service - get stats', () => {
 
   it('should get a player\'s stats', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stats = await new GameStatFactory([game]).many(3)
 
@@ -28,7 +28,7 @@ describe('Player service - get stats', () => {
   })
 
   it('should not get a player\'s stats for a player they have no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const player = await new PlayerFactory([game]).one()
@@ -42,8 +42,8 @@ describe('Player service - get stats', () => {
   })
 
   it('should not get a player\'s stats if they do not exist', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/players/21312321321/stats`)

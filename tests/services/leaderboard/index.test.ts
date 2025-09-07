@@ -1,13 +1,13 @@
 import request from 'supertest'
 import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import Leaderboard from '../../../src/entities/leaderboard'
 
 describe('Leaderboard service - index', () => {
   it('should return a list of leaderboards', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboards = await new LeaderboardFactory([game]).many(3)
     await em.persistAndFlush(leaderboards)
@@ -34,7 +34,7 @@ describe('Leaderboard service - index', () => {
   })
 
   it('should not return leaderboards for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const leaderboards = await new LeaderboardFactory([game]).many(3)

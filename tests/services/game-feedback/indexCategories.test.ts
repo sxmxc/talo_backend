@@ -1,14 +1,14 @@
 import request from 'supertest'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import GameFeedbackFactory from '../../fixtures/GameFeedbackFactory'
 import GameFeedbackCategoryFactory from '../../fixtures/GameFeedbackCategoryFactory'
 import GameFeedbackCategory from '../../../src/entities/game-feedback-category'
 
 describe('Game feedback service - index categories', () => {
   it('should return a list of categories', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const categories = await new GameFeedbackCategoryFactory(game).many(10)
     await em.persistAndFlush(categories)
@@ -35,7 +35,7 @@ describe('Game feedback service - index categories', () => {
   })
 
   it('should not return categories for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await new GameFeedbackFactory(game).many(10)

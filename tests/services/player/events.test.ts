@@ -1,13 +1,13 @@
 import request from 'supertest'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import EventFactory from '../../fixtures/EventFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('Player service - get events', () => {
   it('should get a player\'s events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -34,7 +34,7 @@ describe('Player service - get events', () => {
   })
 
   it('should not get a player\'s events for a player they have no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const player = await new PlayerFactory([game]).one()
@@ -48,8 +48,8 @@ describe('Player service - get events', () => {
   })
 
   it('should return a filtered list of events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -72,8 +72,8 @@ describe('Player service - get events', () => {
   })
 
   it('should paginate results when getting player events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const count = 82
 
@@ -99,8 +99,8 @@ describe('Player service - get events', () => {
   })
 
   it('should not get a player\'s events if they do not exist', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/players/21312321321/events`)

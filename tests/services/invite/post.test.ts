@@ -5,7 +5,7 @@ import InviteFactory from '../../fixtures/InviteFactory'
 import clearEntities from '../../utils/clearEntities'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import { randEmail } from '@ngneat/falso'
 
@@ -33,7 +33,7 @@ describe('Invite service - post', () => {
 
     if (statusCode === 200) {
       expect(res.body.invite.email).toBe(email)
-      expect(res.body.invite.organisation.id).toBe(user.organisation.id)
+      expect(res.body.invite.organization.id).toBe(user.organization.id)
 
       expect(activity!.extra.inviteEmail).toBe(email)
     } else {
@@ -46,7 +46,7 @@ describe('Invite service - post', () => {
   it('should not create an invite when an invite exists for the same email', async () => {
     const [token, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true })
 
-    const invite = await new InviteFactory().construct(user.organisation).state(() => ({ email: randEmail() })).one()
+    const invite = await new InviteFactory().construct(user.organization).state(() => ({ email: randEmail() })).one()
     await em.persistAndFlush(invite)
 
     const res = await request(app)
@@ -83,8 +83,8 @@ describe('Invite service - post', () => {
     }
   })
 
-  it('should not create an invite when an invite exists for the same email on another organisation', async () => {
-    const [otherOrg] = await createOrganisationAndGame()
+  it('should not create an invite when an invite exists for the same email on another organization', async () => {
+    const [otherOrg] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true })
 
     const invite = await new InviteFactory().construct(otherOrg).state(() => ({ email: randEmail() })).one()

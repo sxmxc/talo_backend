@@ -2,7 +2,7 @@ import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
 import DataExport, { DataExportAvailableEntities } from '../../../src/entities/data-export'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import { DataExporter } from '../../../src/lib/queues/data-exports/dataExportProcessor'
@@ -11,8 +11,8 @@ describe('Data export service - post', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ], 200))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -33,7 +33,7 @@ describe('Data export service - post', () => {
   })
 
   it('should not create a data export for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true })
 
     const res = await request(app)
@@ -46,8 +46,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for player aliases', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -59,8 +59,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for players', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -72,8 +72,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -85,8 +85,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for leaderboard entries', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -98,8 +98,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for game stats', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -111,8 +111,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for player game stats', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -124,8 +124,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for game activities', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -137,8 +137,8 @@ describe('Data export service - post', () => {
   })
 
   it('should create a data export for game feedback', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -150,8 +150,8 @@ describe('Data export service - post', () => {
   })
 
   it('should not create a data export for users with unconfirmed emails', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -163,8 +163,8 @@ describe('Data export service - post', () => {
   })
 
   it('should not create a data export for empty entities', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -179,8 +179,8 @@ describe('Data export service - post', () => {
   })
 
   it('should not create a data export with non-string entities', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)
@@ -198,8 +198,8 @@ describe('Data export service - post', () => {
   it('should handle data export errors', async () => {
     vi.spyOn(DataExporter.prototype, 'createZipStream').mockRejectedValueOnce(new Error('bad news'))
 
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/data-exports`)

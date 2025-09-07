@@ -2,7 +2,7 @@ import request from 'supertest'
 import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import LeaderboardEntryFactory from '../../fixtures/LeaderboardEntryFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import LeaderboardEntry from '../../../src/entities/leaderboard-entry'
 import LeaderboardEntryProp from '../../../src/entities/leaderboard-entry-prop'
@@ -11,8 +11,8 @@ import { LeaderboardSortMode } from '../../../src/entities/leaderboard'
 
 describe('Leaderboard service - entries', () => {
   it('should return a leaderboard\'s entries', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(10)
     em.persist(players)
@@ -31,8 +31,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should not return entries for a non-existent leaderboard', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/leaderboards/21312312/entries`)
@@ -44,7 +44,7 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should not return a leaderboard\'s entries for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const leaderboard = await new LeaderboardFactory([game]).withEntries().one()
@@ -58,8 +58,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should correctly mark the last page', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(10)
     em.persist(players)
@@ -83,8 +83,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should not return leaderboard entries for dev build players without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).withEntries().devBuildPlayers().one()
     await em.persistAndFlush(leaderboard)
@@ -99,8 +99,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should return leaderboard entries for dev build players with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).withEntries().devBuildPlayers().one()
     await em.persistAndFlush(leaderboard)
@@ -116,8 +116,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should return archived entries', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(10)
     const leaderboard = await new LeaderboardFactory([game]).one()
@@ -138,8 +138,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should filter leaderboard entries by prop keys', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(2)
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({ unique: false })).one()
@@ -165,8 +165,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should filter leaderboard entries by prop keys and values', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(2)
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({ unique: false })).one()
@@ -198,8 +198,8 @@ describe('Leaderboard service - entries', () => {
   })
 
   it('should return the correct positions for a mixed of archived, active and hidden entries when fitlering by alias', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(2)
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({ unique: false, sortMode: LeaderboardSortMode.ASC })).one()

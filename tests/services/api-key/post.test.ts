@@ -3,14 +3,14 @@ import { UserType } from '../../../src/entities/user'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 
 describe('API key service - post', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/api-keys`)
@@ -41,8 +41,8 @@ describe('API key service - post', () => {
   })
 
   it('should not create an api key if the user\'s email is not confirmed', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/api-keys`)
@@ -66,7 +66,7 @@ describe('API key service - post', () => {
   })
 
   it('should not create an api key for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ emailConfirmed: true, type: UserType.ADMIN })
 
     const res = await request(app)

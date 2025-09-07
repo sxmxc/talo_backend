@@ -1,12 +1,12 @@
 import request from 'supertest'
 import APIKey from '../../../src/entities/api-key'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('API key service - get', () => {
   it('should return a list of api keys', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token, user] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token, user] = await createUserAndToken({}, organization)
 
     const keys: APIKey[] = [...new Array(3)].map(() => new APIKey(game, user))
     await em.persistAndFlush(keys)
@@ -31,7 +31,7 @@ describe('API key service - get', () => {
   })
 
   it('should not return a list of api keys for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({})
 
     await request(app)

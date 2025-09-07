@@ -1,13 +1,13 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import UserPinnedGroupFactory from '../../fixtures/UserPinnedGroupFactory'
 import PlayerGroupFactory from '../../fixtures/PlayerGroupFactory'
 
 describe('Player group service - index pinned', () => {
   it('should return a list of groups', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token, user] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token, user] = await createUserAndToken({}, organization)
 
     const pinned = await new UserPinnedGroupFactory()
       .state(() => ({ user }))
@@ -36,7 +36,7 @@ describe('Player group service - index pinned', () => {
   })
 
   it('should not return groups for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await request(app)

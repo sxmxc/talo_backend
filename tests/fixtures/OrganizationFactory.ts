@@ -1,19 +1,19 @@
 import { Factory } from 'hefty'
-import Organisation from '../../src/entities/organisation'
+import Organization from '../../src/entities/organization'
 import PricingPlanFactory from './PricingPlanFactory'
-import OrganisationPricingPlanFactory from './OrganisationPricingPlanFactory'
+import OrganizationPricingPlanFactory from './OrganizationPricingPlanFactory'
 import { randCompanyName, randEmail } from '@ngneat/falso'
 
-export default class OrganisationFactory extends Factory<Organisation> {
+export default class OrganizationFactory extends Factory<Organization> {
   constructor() {
-    super(Organisation)
+    super(Organization)
   }
 
   protected definition(): void {
-    this.state(async (organisation) => {
+    this.state(async (organization) => {
       const plan = await new PricingPlanFactory().one()
-      const orgPlan = await new OrganisationPricingPlanFactory().state(() => ({
-        organisation,
+      const orgPlan = await new OrganizationPricingPlanFactory().state(() => ({
+        organization,
         pricingPlan: plan
       })).one()
 
@@ -27,7 +27,7 @@ export default class OrganisationFactory extends Factory<Organisation> {
 
   demo(): this {
     return this.state(() => ({
-      name: process.env.DEMO_ORGANISATION_NAME
+      name: process.env.DEMO_ORGANIZATION_NAME
     }))
   }
 }

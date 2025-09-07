@@ -1,5 +1,5 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import initStripe from '../../../../src/lib/billing/initStripe'
 import { v4 } from 'uuid'
 import PricingPlanFactory from '../../../fixtures/PricingPlanFactory'
@@ -15,14 +15,14 @@ describe('Webhook service - subscription created', () => {
     sendMock.mockClear()
   })
 
-  it('should update the organisation pricing plan with the updated subscription\'s details', async () => {
+  it('should update the organization pricing plan with the updated subscription\'s details', async () => {
     const product = (await stripe.products.list()).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
     const subscription = (await stripe.subscriptions.list()).data[0]
 
-    organisation.pricingPlan.stripeCustomerId = (subscription.customer as string) + organisation.id
+    organization.pricingPlan.stripeCustomerId = (subscription.customer as string) + organization.id
     await em.flush()
 
     const payload = JSON.stringify({
@@ -31,7 +31,7 @@ describe('Webhook service - subscription created', () => {
       data: {
         object: {
           ...subscription,
-          customer: organisation.pricingPlan.stripeCustomerId
+          customer: organization.pricingPlan.stripeCustomerId
         }
       },
       api_version: '2020-08-27',
@@ -53,9 +53,9 @@ describe('Webhook service - subscription created', () => {
       .send(payload)
       .expect(204)
 
-    await em.refresh(organisation)
+    await em.refresh(organization)
     const price = subscription.items.data[0].price
-    expect(organisation.pricingPlan.stripePriceId).toBe(price.id)
-    expect(sendMock).toHaveBeenCalledWith(new PlanUpgraded(organisation, price, product).getConfig())
+    expect(organization.pricingPlan.stripePriceId).toBe(price.id)
+    expect(sendMock).toHaveBeenCalledWith(new PlanUpgraded(organization, price, product).getConfig())
   })
 })

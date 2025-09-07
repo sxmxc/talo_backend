@@ -2,7 +2,7 @@ import { IntegrationType } from '../../../src/entities/integration'
 import { GetLeaderboardEntriesResponse, GetLeaderboardsForGameResponse, syncSteamworksLeaderboards } from '../../../src/lib/integrations/steamworks-integration'
 import IntegrationConfigFactory from '../../fixtures/IntegrationConfigFactory'
 import IntegrationFactory from '../../fixtures/IntegrationFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import AxiosMockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import SteamworksIntegrationEvent from '../../../src/entities/steamworks-integration-event'
@@ -18,7 +18,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   const axiosMock = new AxiosMockAdapter(axios)
 
   it('should pull in leaderboards and entries from steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const steamworksLeaderboardId = randNumber({ min: 100_000, max: 999_999 })
 
@@ -93,7 +93,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   })
 
   it('should throw if the response leaderboards are not an array', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const config = await new IntegrationConfigFactory().one()
     const integration = await new IntegrationFactory().construct(IntegrationType.STEAMWORKS, game, config).one()
@@ -112,7 +112,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   })
 
   it('should update leaderboards with properties from steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({ sortMode: LeaderboardSortMode.ASC })).one()
     const mapping = new SteamworksLeaderboardMapping(randNumber({ min: 100_000, max: 999_999 }), leaderboard)
@@ -166,7 +166,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   })
 
   it('should create a leaderboard mapping if a leaderboard with the same internal name exists', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const steamworksLeaderboardId = randNumber({ min: 100_000, max: 999_999 })
@@ -217,7 +217,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   })
 
   it('should create leaderboards in steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({ sortMode: LeaderboardSortMode.DESC })).one()
 
@@ -262,7 +262,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   })
 
   it('should push through entries from steamworks for existing steam player aliases', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const steamworksLeaderboardId = randNumber({ min: 100_000, max: 999_999 })
 
@@ -315,7 +315,7 @@ describe('Steamworks integration - sync leaderboards', () => {
   })
 
   it('should push through entries from talo into steamworks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const mapping = new SteamworksLeaderboardMapping(randNumber({ min: 100_000, max: 999_999 }), leaderboard)

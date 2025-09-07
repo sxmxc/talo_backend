@@ -2,15 +2,15 @@ import request from 'supertest'
 import UserTwoFactorAuth from '../../../src/entities/user-two-factor-auth'
 import UserRecoveryCode from '../../../src/entities/user-recovery-code'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 
 describe('User service - disable 2fa', () => {
   it('should let users disable 2fa', async () => {
     const twoFactorAuth = new UserTwoFactorAuth('blah')
     twoFactorAuth.enabled = true
 
-    const [organisation] = await createOrganisationAndGame()
-    const [token, user] = await createUserAndToken({ twoFactorAuth }, organisation)
+    const [organization] = await createOrganizationAndGame()
+    const [token, user] = await createUserAndToken({ twoFactorAuth }, organization)
 
     const res = await request(app)
       .post('/users/2fa/disable')
@@ -19,8 +19,8 @@ describe('User service - disable 2fa', () => {
       .expect(200)
 
     expect(res.body.user.has2fa).toBe(false)
-    expect(res.body.user.organisation).toBeTruthy()
-    expect(res.body.user.organisation.games).toHaveLength(1)
+    expect(res.body.user.organization).toBeTruthy()
+    expect(res.body.user.organization.games).toHaveLength(1)
 
     const recoveryCodes = await em.getRepository(UserRecoveryCode).find({ user })
     expect(recoveryCodes).toHaveLength(0)

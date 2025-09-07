@@ -3,7 +3,7 @@ import { HasPermission, Service, Request, Response, Validate, Route } from 'koa-
 import Invite from '../entities/invite'
 import User, { UserType } from '../entities/user'
 import InvitePolicy from '../policies/invite.policy'
-import JoinOrganisation from '../emails/join-organisation-mail'
+import JoinOrganization from '../emails/join-organization-mail'
 import createGameActivity from '../lib/logging/createGameActivity'
 import { GameActivityType } from '../entities/game-activity'
 import queueEmail from '../lib/messaging/queueEmail'
@@ -16,7 +16,7 @@ export default class InviteService extends Service {
   async index(req: Request): Promise<Response> {
     const em: EntityManager = req.ctx.em
     const invites = await em.getRepository(Invite).find({
-      organisation: (req.ctx.state.user as User).organisation
+      organization: (req.ctx.state.user as User).organization
     })
 
     return {
@@ -47,13 +47,13 @@ export default class InviteService extends Service {
 
     const duplicateEmailInvite = await em.getRepository(Invite).findOne({ email: email.toLowerCase() })
     if (duplicateEmailInvite) {
-      req.ctx.throw(400, duplicateEmailInvite.organisation.id === inviter.organisation.id
+      req.ctx.throw(400, duplicateEmailInvite.organization.id === inviter.organization.id
         ? 'An invite for this email address already exists'
         : 'This email address is already in use'
       )
     }
 
-    const invite = new Invite(inviter.organisation)
+    const invite = new Invite(inviter.organization)
     invite.email = email
     invite.type = type
     invite.invitedByUser = inviter
@@ -71,7 +71,7 @@ export default class InviteService extends Service {
 
     await em.persistAndFlush(invite)
 
-    await queueEmail(req.ctx.emailQueue, new JoinOrganisation(invite))
+    await queueEmail(req.ctx.emailQueue, new JoinOrganization(invite))
 
     return {
       status: 200,

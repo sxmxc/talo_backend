@@ -8,7 +8,7 @@ import GameActivityFactory from '../../fixtures/GameActivityFactory'
 import { GameActivityType } from '../../../src/entities/game-activity'
 import GameStatFactory from '../../fixtures/GameStatFactory'
 import PlayerProp from '../../../src/entities/player-prop'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameFeedbackFactory from '../../fixtures/GameFeedbackFactory'
 import { DataExporter } from '../../../src/lib/queues/data-exports/dataExportProcessor'
@@ -33,7 +33,7 @@ async function parseCsvString(csvString: string): Promise<string[][]> {
 
 describe('Data export service - generation', () => {
   it('should transform basic columns', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -55,7 +55,7 @@ describe('Data export service - generation', () => {
   })
 
   it('should transform prop columns', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -78,8 +78,8 @@ describe('Data export service - generation', () => {
   })
 
   it('should transform gameActivityType columns', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -92,8 +92,8 @@ describe('Data export service - generation', () => {
   })
 
   it('should transform gameActivityExtra columns', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -108,7 +108,7 @@ describe('Data export service - generation', () => {
   })
 
   it('should transform globalValue columns', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -120,7 +120,7 @@ describe('Data export service - generation', () => {
   })
 
   it('should fill globalValue columns with N/A for non-global stats', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -131,7 +131,7 @@ describe('Data export service - generation', () => {
   })
 
   it('should transform anonymised feedback columns', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -144,7 +144,7 @@ describe('Data export service - generation', () => {
   })
 
   it('should not transform non-anonymised feedback columns', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -172,7 +172,7 @@ describe('Data export service - createZipStream', () => {
   })
 
   it('should generate a zip with players.csv and correct prop column ordering', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const player1 = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [

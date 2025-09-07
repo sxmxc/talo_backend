@@ -3,7 +3,7 @@ import request from 'supertest'
 import EventFactory from '../../fixtures/EventFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import { sub, format } from 'date-fns'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerAlias from '../../../src/entities/player-alias'
 import PlayerAliasFactory from '../../fixtures/PlayerAliasFactory'
@@ -16,8 +16,8 @@ describe('Headline service - get', () => {
   const endDate = format(new Date(), 'yyyy-MM-dd')
 
   it('should return the correct number of new events this week', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -39,8 +39,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return new events for dev build players without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -62,8 +62,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return new events for dev build players with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -86,8 +86,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the correct number of new players this week', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const newPlayers = await new PlayerFactory([game]).createdThisWeek().many(10)
     const oldPlayers = await new PlayerFactory([game]).notCreatedThisWeek().many(10)
@@ -103,8 +103,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return new dev build players without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const newPlayers = await new PlayerFactory([game]).createdThisWeek().devBuild().many(10)
     await em.persistAndFlush(newPlayers)
@@ -119,8 +119,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return new dev build players with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const newPlayers = await new PlayerFactory([game]).createdThisWeek().devBuild().many(10)
     await em.persistAndFlush(newPlayers)
@@ -136,8 +136,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the correct number of returning players this week', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const playersNotSeenThisWeek = await new PlayerFactory([game]).notSeenThisWeek().many(6)
 
@@ -159,8 +159,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return returning dev build players without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const returningPlayersSeenThisWeek = await new PlayerFactory([game])
       .seenThisWeek()
@@ -180,8 +180,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return returning dev build players with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const returningPlayersSeenThisWeek = await new PlayerFactory([game])
       .seenThisWeek()
@@ -202,8 +202,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the correct number of unique event submitters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).state(async (player) => {
       const alias = await new PlayerAliasFactory(player).one()
@@ -239,8 +239,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return dev build unique event submitters without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -262,8 +262,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return dev build unique event submitters with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().state(async (player) => {
       const alias = await new PlayerAliasFactory(player).one()
@@ -291,8 +291,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the total number of players', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).many(10)
     await em.persistAndFlush(players)
@@ -306,8 +306,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return dev build players in total count without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).devBuild().many(10)
     await em.persistAndFlush(players)
@@ -321,8 +321,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return dev build players in total count with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const players = await new PlayerFactory([game]).devBuild().many(10)
     await em.persistAndFlush(players)
@@ -337,8 +337,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the number of online players', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const onlinePlayers = await new PlayerFactory([game])
       .state(async (player) => ({ presence: await new PlayerPresenceFactory(player.game).online().one() }))
@@ -358,8 +358,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return dev build online players without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const onlinePlayers = await new PlayerFactory([game])
       .devBuild()
@@ -377,8 +377,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return dev build online players with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const onlinePlayers = await new PlayerFactory([game])
       .devBuild()
@@ -397,8 +397,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the total number of sessions this week', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -427,8 +427,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not return dev build sessions without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -457,8 +457,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return dev build sessions with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -488,8 +488,8 @@ describe('Headline service - get', () => {
   })
 
   it('should return the average session duration this week', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -523,8 +523,8 @@ describe('Headline service - get', () => {
   })
 
   it('should not include dev build sessions in average duration without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -558,8 +558,8 @@ describe('Headline service - get', () => {
   })
 
   it('should include dev build sessions in average duration with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     await em.persistAndFlush(player)
@@ -594,7 +594,7 @@ describe('Headline service - get', () => {
   })
 
   it('should not return headlines for a game the user cant access', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({})
 
     await request(app)

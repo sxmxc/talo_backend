@@ -89,7 +89,7 @@ async function deletePlayers(em: EntityManager, clickhouse: ClickHouseClient, pl
   createGameActivity(em, {
     user: await em.repo(User).findOneOrFail({
       type: UserType.OWNER,
-      organisation: game.organisation
+      organization: game.organization
     }),
     game,
     type: devBuild

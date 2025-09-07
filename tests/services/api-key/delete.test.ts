@@ -5,7 +5,7 @@ import UserFactory from '../../fixtures/UserFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import { createSocketTicket } from '../../../src/services/api/socket-ticket-api.service'
 import createTestSocket from '../../utils/createTestSocket'
 
@@ -13,8 +13,8 @@ describe('API key service - delete', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ], 204))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token, user] = await createUserAndToken({ type, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token, user] = await createUserAndToken({ type, emailConfirmed: true }, organization)
 
     const key = new APIKey(game, user)
     await em.persistAndFlush(key)
@@ -46,8 +46,8 @@ describe('API key service - delete', () => {
   })
 
   it('should not delete an api key that doesn\'t exist', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .delete(`/games/${game.id}/api-keys/99`)
@@ -58,10 +58,10 @@ describe('API key service - delete', () => {
   })
 
   it('should not delete an api key for a game the user has no access to', async () => {
-    const [otherOrg, otherGame] = await createOrganisationAndGame()
+    const [otherOrg, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
-    const user = await new UserFactory().state(() => ({ organisation: otherOrg })).one()
+    const user = await new UserFactory().state(() => ({ organization: otherOrg })).one()
     const key = new APIKey(otherGame, user)
     await em.persistAndFlush(key)
 
@@ -74,8 +74,8 @@ describe('API key service - delete', () => {
   })
 
   it('should disconnect socket connections for the api key', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token, user] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const key = new APIKey(game, user)
     await em.persistAndFlush(key)

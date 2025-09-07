@@ -14,7 +14,7 @@ export default class InvitePublicService extends Service {
     const invite = await em.getRepository(Invite).findOne({
       token: id
     }, {
-      populate: ['organisation', 'invitedByUser']
+      populate: ['organization', 'invitedByUser']
     })
 
     if (!invite) req.ctx.throw(404, 'Invite not found')

@@ -3,7 +3,7 @@ import { APIKeyScope } from '../../../../src/entities/api-key'
 import PlayerFactory from '../../../fixtures/PlayerFactory'
 import GameSaveFactory from '../../../fixtures/GameSaveFactory'
 import createAPIKeyAndToken from '../../../utils/createAPIKeyAndToken'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 
 describe('Game save API service - index', () => {
   it('should return game saves if the scope is valid', async () => {
@@ -49,7 +49,7 @@ describe('Game save API service - index', () => {
 
   it('should not return game saves for a player from another game', async () => {
     const [, token] = await createAPIKeyAndToken([])
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const otherPlayer = await new PlayerFactory([game]).one()
 
     await em.persistAndFlush(otherPlayer)

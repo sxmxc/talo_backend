@@ -1,11 +1,11 @@
 import request from 'supertest'
 import InviteFactory from '../../../fixtures/InviteFactory'
-import OrganisationFactory from '../../../fixtures/OrganisationFactory'
+import OrganizationFactory from '../../../fixtures/OrganizationFactory'
 
 describe('Invite public service - get', () => {
   it('should return an existing invite', async () => {
-    const organisation = await new OrganisationFactory().one()
-    const invite = await new InviteFactory().construct(organisation).one()
+    const organization = await new OrganizationFactory().one()
+    const invite = await new InviteFactory().construct(organization).one()
     await em.persistAndFlush(invite)
 
     const res = await request(app)

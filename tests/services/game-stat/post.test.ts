@@ -2,7 +2,7 @@ import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import GameStatFactory from '../../fixtures/GameStatFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 
@@ -11,8 +11,8 @@ describe('Game stat service - post', () => {
     UserType.ADMIN,
     UserType.DEV
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -45,8 +45,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should create a global stat', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -76,7 +76,7 @@ describe('Game stat service - post', () => {
   })
 
   it('should not create a stat for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)
@@ -101,8 +101,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should not create a stat with a duplicate internal name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({ internalName: 'levels-completed' })).one()
     await em.persistAndFlush(stat)
@@ -121,9 +121,9 @@ describe('Game stat service - post', () => {
   })
 
   it('should create a stat with a duplicate internal name for another game', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [, otherGame] = await createOrganizationAndGame()
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([otherGame]).state(() => ({ internalName: 'levels-completed' })).one()
     await em.persistAndFlush(stat)
@@ -136,8 +136,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should create a stat with no min value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -150,8 +150,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should create a stat with no max value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -164,8 +164,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should create a stat with no max change', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -178,8 +178,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should not create a stat with a max change equal to 0', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -195,8 +195,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should not create a stat with a max change less than 0', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)
@@ -212,8 +212,8 @@ describe('Game stat service - post', () => {
   })
 
   it('should gracefully handle mysql out of range errors', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-stats`)

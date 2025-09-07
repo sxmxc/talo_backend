@@ -1,5 +1,5 @@
 import { rm } from 'fs/promises'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../../utils/createUserAndToken'
 import GameActivityFactory from '../../../fixtures/GameActivityFactory'
 import DataExportFactory from '../../../fixtures/DataExportFactory'
@@ -16,8 +16,8 @@ describe('Data export service - processor', () => {
   it('should process a data export', async () => {
     vi.spyOn(sendEmail, 'default').mockResolvedValueOnce()
 
-    const [organisation, game] = await createOrganisationAndGame()
-    const [, user] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [, user] = await createUserAndToken({}, organization)
 
     const gameActivities = await new GameActivityFactory([game], [user]).many(10)
 

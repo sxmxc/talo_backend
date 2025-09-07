@@ -1,6 +1,6 @@
 import { Collection } from '@mikro-orm/mysql'
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
@@ -15,8 +15,8 @@ describe('Player group service - put', () => {
     UserType.DEV,
     UserType.ADMIN
   ], 200))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const group = await new PlayerGroupFactory().construct(game).one()
     await em.persistAndFlush(group)
@@ -63,8 +63,8 @@ describe('Player group service - put', () => {
   })
 
   it('should immediately add valid players to the updated group', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const group = await new PlayerGroupFactory().construct(game).one()
     await em.persistAndFlush(group)
@@ -104,7 +104,7 @@ describe('Player group service - put', () => {
   })
 
   it('should not update a group for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const group = await new PlayerGroupFactory().construct(otherGame).one()
@@ -126,8 +126,8 @@ describe('Player group service - put', () => {
   })
 
   it('should not update a non-existent group', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .put(`/games/${game.id}/player-groups/4324234`)

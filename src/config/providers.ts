@@ -14,6 +14,7 @@ export default async function initProviders(app: Koa, isTest: boolean) {
 
     if (!isTest) {
       const migrator = orm.getMigrator()
+      await migrator.createMigration()
       await migrator.up()
     }
   } catch (err) {

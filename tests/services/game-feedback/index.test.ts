@@ -1,6 +1,6 @@
 import request from 'supertest'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import GameFeedbackFactory from '../../fixtures/GameFeedbackFactory'
 import GameFeedbackCategoryFactory from '../../fixtures/GameFeedbackCategoryFactory'
 import PlayerAliasFactory from '../../fixtures/PlayerAliasFactory'
@@ -10,8 +10,8 @@ import GameFeedbackProp from '../../../src/entities/game-feedback-prop'
 
 describe('Game feedback service - index', () => {
   it('should return a list of game feedback', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const feedback = await new GameFeedbackFactory(game).many(10)
     await em.persistAndFlush(feedback)
@@ -26,8 +26,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific category', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -57,7 +57,7 @@ describe('Game feedback service - index', () => {
   })
 
   it('should not return game feedback for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await new GameFeedbackFactory(game).many(10)
@@ -70,8 +70,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should paginate results when getting feedback', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const count = 82
     const feedback = await new GameFeedbackFactory(game).many(count)
@@ -91,8 +91,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific comment', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -110,8 +110,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific category and a specific comment', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -130,8 +130,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific player alias', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -158,8 +158,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should not return game feedback for a specific player alias if their feedback is anonymised', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -184,8 +184,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific category and a specific player alias', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -218,8 +218,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should not return feedback from dev build players if the dev data header is not set', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     const feedback = await new GameFeedbackFactory(game).state(() => ({ playerAlias: player.aliases[0] })).many(10)
@@ -235,8 +235,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific prop key', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -259,8 +259,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific prop value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 
@@ -283,8 +283,8 @@ describe('Game feedback service - index', () => {
   })
 
   it('should return a list of game feedback for a specific prop key and value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).one()
 

@@ -10,7 +10,7 @@ describe('Invite service - index', () => {
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
     const [token, user] = await createUserAndToken({ type })
 
-    const invites = await new InviteFactory().construct(user.organisation).many(3)
+    const invites = await new InviteFactory().construct(user.organization).many(3)
     await em.persistAndFlush(invites)
 
     const res = await request(app)

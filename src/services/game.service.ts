@@ -66,7 +66,7 @@ export default class GameService extends Service {
     const em: EntityManager = req.ctx.em
     const user = await getUserFromToken(req.ctx)
 
-    const game = new Game(name, user.organisation)
+    const game = new Game(name, user.organization)
     try {
       game.apiSecret = new GameSecret()
     } catch (err) {

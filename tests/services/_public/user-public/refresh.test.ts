@@ -1,13 +1,13 @@
 import request from 'supertest'
 import UserSession from '../../../../src/entities/user-session'
 import UserFactory from '../../../fixtures/UserFactory'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 
 describe('User public service - refresh', () => {
   it('should let a user refresh their session if they have one', async () => {
-    const [organisation] = await createOrganisationAndGame()
+    const [organization] = await createOrganizationAndGame()
     const user = await new UserFactory().state(() => ({
-      organisation,
+      organization,
       lastSeenAt: new Date(2020, 1, 1)
     })).one()
     const session = new UserSession(user)
@@ -20,8 +20,8 @@ describe('User public service - refresh', () => {
 
     expect(res.body.accessToken).toBeTruthy()
     expect(res.body.user).toBeTruthy()
-    expect(res.body.user.organisation).toBeTruthy()
-    expect(res.body.user.organisation.games).toHaveLength(1)
+    expect(res.body.user.organization).toBeTruthy()
+    expect(res.body.user.organization.games).toHaveLength(1)
 
     expect(new Date(res.body.user.lastSeenAt).getDay()).toEqual(new Date().getDay())
   })

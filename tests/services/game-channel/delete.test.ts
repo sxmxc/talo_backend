@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import GameChannelFactory from '../../fixtures/GameChannelFactory'
@@ -10,8 +10,8 @@ describe('Game channel service - delete', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ], 204))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const channel = await new GameChannelFactory(game).one()
     await em.persistAndFlush(channel)
@@ -35,7 +35,7 @@ describe('Game channel service - delete', () => {
   })
 
   it('should not delete a game channel the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const channel = await new GameChannelFactory(game).one()
@@ -50,7 +50,7 @@ describe('Game channel service - delete', () => {
   })
 
   it('should not delete a game channel for a non-existent game', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const channel = await new GameChannelFactory(game).one()
@@ -65,7 +65,7 @@ describe('Game channel service - delete', () => {
   })
 
   it('should not delete a non-existent game channel', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const res = await request(app)

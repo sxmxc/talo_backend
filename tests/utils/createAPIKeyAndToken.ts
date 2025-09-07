@@ -6,7 +6,7 @@ import UserFactory from '../fixtures/UserFactory'
 export default async function createAPIKeyAndToken(scopes: APIKeyScope[]): Promise<[APIKey, string]> {
   const user = await new UserFactory().one()
 
-  const game = await new GameFactory(user.organisation).one()
+  const game = await new GameFactory(user.organization).one()
   const apiKey = new APIKey(game, user)
   apiKey.scopes = scopes
   await em.persistAndFlush(apiKey)

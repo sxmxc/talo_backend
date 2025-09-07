@@ -1,6 +1,6 @@
 import request from 'supertest'
-import Organisation from '../../../../src/entities/organisation'
-import OrganisationFactory from '../../../fixtures/OrganisationFactory'
+import Organization from '../../../../src/entities/organization'
+import OrganizationFactory from '../../../fixtures/OrganizationFactory'
 import User, { UserType } from '../../../../src/entities/user'
 import EventFactory from '../../../fixtures/EventFactory'
 import PlayerFactory from '../../../fixtures/PlayerFactory'
@@ -10,10 +10,10 @@ import randomDate from '../../../../src/lib/dates/randomDate'
 import { formatDateForClickHouse } from '../../../../src/lib/clickhouse/formatDateTime'
 
 describe('Demo service - post', () => {
-  let demoOrg: Organisation
+  let demoOrg: Organization
 
   beforeAll(async () => {
-    demoOrg = await new OrganisationFactory().demo().one()
+    demoOrg = await new OrganizationFactory().demo().one()
     await em.persistAndFlush(demoOrg)
   })
 
@@ -23,7 +23,7 @@ describe('Demo service - post', () => {
       .expect(200)
 
     expect(res.body.user).toBeTruthy()
-    expect(res.body.user.organisation.id).toBe(demoOrg.id)
+    expect(res.body.user.organization.id).toBe(demoOrg.id)
     expect(res.body.user.type).toBe(UserType.DEMO)
 
     expect(res.body.accessToken).toBeTruthy()

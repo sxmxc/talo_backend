@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { IntegrationType } from '../../../src/entities/integration'
 import IntegrationConfigFactory from '../../fixtures/IntegrationConfigFactory'
@@ -11,8 +11,8 @@ describe('Integration service - index', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const config = await new IntegrationConfigFactory().one()
     const integrations = await new IntegrationFactory().construct(IntegrationType.STEAMWORKS, game, config).many(3)
@@ -35,7 +35,7 @@ describe('Integration service - index', () => {
   })
 
   it('should not return integrations for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const config = await new IntegrationConfigFactory().one()

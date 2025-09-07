@@ -1,7 +1,7 @@
 import request from 'supertest'
 import initStripe from '../../../src/lib/billing/initStripe'
 import PricingPlanFactory from '../../fixtures/PricingPlanFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
@@ -16,11 +16,11 @@ describe('Billing service - create portal session', () => {
 
     const subscription = (await stripe.subscriptions.list()).data[0]
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({ type }, organization)
 
-    organisation.pricingPlan.stripeCustomerId = subscription.customer as string
-    organisation.pricingPlan.stripePriceId = price.id
+    organization.pricingPlan.stripeCustomerId = subscription.customer as string
+    organization.pricingPlan.stripePriceId = price.id
     await em.flush()
 
     const res = await request(app)
@@ -31,20 +31,20 @@ describe('Billing service - create portal session', () => {
     if (statusCode === 200) {
       expect(res.body.redirect).toBeDefined()
     } else {
-      expect(res.body).toStrictEqual({ message: 'You do not have permissions to update the organisation pricing plan' })
+      expect(res.body).toStrictEqual({ message: 'You do not have permissions to update the organization pricing plan' })
     }
   })
 
-  it('should return a 400 if the organisation doesn\'t have a stripeCustomerId', async () => {
+  it('should return a 400 if the organization doesn\'t have a stripeCustomerId', async () => {
     const product = (await stripe.products.list()).data[0]
     const price = (await stripe.prices.list({ product: product.id })).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
-    organisation.pricingPlan.stripeCustomerId = null
-    organisation.pricingPlan.stripePriceId = price.id
+    organization.pricingPlan.stripeCustomerId = null
+    organization.pricingPlan.stripePriceId = price.id
     await em.flush()
 
     await request(app)

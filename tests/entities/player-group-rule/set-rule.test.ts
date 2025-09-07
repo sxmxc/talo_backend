@@ -3,7 +3,7 @@ import request from 'supertest'
 import PlayerGroupRule, { PlayerGroupRuleCastType, PlayerGroupRuleName } from '../../../src/entities/player-group-rule'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import PlayerProp from '../../../src/entities/player-prop'
 import GameStatFactory from '../../fixtures/GameStatFactory'
 import PlayerGameStatFactory from '../../fixtures/PlayerGameStatFactory'
@@ -12,8 +12,8 @@ import LeaderboardEntryFactory from '../../fixtures/LeaderboardEntryFactory'
 
 describe('SET rule', () => {
   it('should correctly evaluate a SET rule with props', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [
@@ -43,8 +43,8 @@ describe('SET rule', () => {
   })
 
   it('should correctly evaluate a negated SET rule with props', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [
@@ -74,8 +74,8 @@ describe('SET rule', () => {
   })
 
   it('should correctly evaluate a SET rule with stat values', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).one()
     const player2 = await new PlayerFactory([game]).one()
@@ -104,8 +104,8 @@ describe('SET rule', () => {
   })
 
   it('should correctly evaluate a negated SET rule with stat values', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).one()
     const player2 = await new PlayerFactory([game]).one()
@@ -134,8 +134,8 @@ describe('SET rule', () => {
   })
 
   it('should correctly evaluate a SET rule with leaderboard entry scores', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).one()
     const player2 = await new PlayerFactory([game]).one()
@@ -164,8 +164,8 @@ describe('SET rule', () => {
   })
 
   it('should correctly evaluate a negated SET rule with leaderboard entry scores', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).one()
     const player2 = await new PlayerFactory([game]).one()

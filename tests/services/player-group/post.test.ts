@@ -1,6 +1,6 @@
 import { Collection } from '@mikro-orm/mysql'
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
@@ -14,8 +14,8 @@ describe('Player group service - post', () => {
     UserType.DEV,
     UserType.ADMIN
   ], 200))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const rules: Partial<PlayerGroupRule & { namespaced: boolean }>[] = [
       {
@@ -60,8 +60,8 @@ describe('Player group service - post', () => {
   })
 
   it('should immediately add valid players to the created group', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player1 = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [
@@ -97,8 +97,8 @@ describe('Player group service - post', () => {
   })
 
   it('should require a valid ruleMode', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/player-groups`)
@@ -120,8 +120,8 @@ describe('Player group service - post', () => {
   })
 
   it('should require rules to be an array', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/player-groups`)
@@ -143,8 +143,8 @@ describe('Player group service - post', () => {
   })
 
   it('should require all rules to have a valid name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/player-groups`)
@@ -174,8 +174,8 @@ describe('Player group service - post', () => {
   })
 
   it('should require all rules to have a valid castType', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/player-groups`)
@@ -205,8 +205,8 @@ describe('Player group service - post', () => {
   })
 
   it('should require all rules to have a boolean value for negate', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/player-groups`)
@@ -236,8 +236,8 @@ describe('Player group service - post', () => {
   })
 
   it('should require all rules to have a valid field', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/player-groups`)
@@ -267,7 +267,7 @@ describe('Player group service - post', () => {
   })
 
   it('should not create a group for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)

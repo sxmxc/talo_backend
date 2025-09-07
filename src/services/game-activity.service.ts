@@ -21,7 +21,7 @@ export default class GameActivityService extends Service {
             {
               game: null,
               user: {
-                organisation: (req.ctx.state.user as User).organisation
+                organization: (req.ctx.state.user as User).organization
               }
             }
           ]

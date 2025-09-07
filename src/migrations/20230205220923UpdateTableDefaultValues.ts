@@ -5,7 +5,7 @@ export class UpdateTableDefaultValues extends Migration {
   async up(): Promise<void> {
     this.addSql('alter table `game_save` drop foreign key `game_save_player_id_foreign`;')
 
-    this.addSql('alter table `organisation_pricing_plan` modify `status` varchar(255) not null default \'active\';')
+    this.addSql('alter table `organization_pricing_plan` modify `status` varchar(255) not null default \'active\';')
 
     this.addSql('alter table `player_group` modify `rule_mode` enum(\'$and\', \'$or\') not null default \'$and\';')
 
@@ -26,7 +26,7 @@ export class UpdateTableDefaultValues extends Migration {
   async down(): Promise<void> {
     this.addSql('alter table `game_save` drop foreign key `game_save_player_id_foreign`;')
 
-    this.addSql('alter table `organisation_pricing_plan` modify `status` varchar(255) not null;')
+    this.addSql('alter table `organization_pricing_plan` modify `status` varchar(255) not null;')
 
     this.addSql('alter table `player_group` modify `rule_mode` enum(\'$and\', \'$or\') not null;')
 

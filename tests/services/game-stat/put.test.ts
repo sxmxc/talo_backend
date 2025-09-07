@@ -1,13 +1,13 @@
 import request from 'supertest'
 import GameStatFactory from '../../fixtures/GameStatFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('Game stat service - put', () => {
   it('should update the name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).one()
     await em.persistAndFlush(stat)
@@ -34,8 +34,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should update the global status', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({ global: false })).one()
     await em.persistAndFlush(stat)
@@ -62,8 +62,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should update the max change', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).one()
     await em.persistAndFlush(stat)
@@ -90,8 +90,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should update the min value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: -600,
@@ -122,8 +122,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should update the max value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: -100,
@@ -154,8 +154,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should update the default value', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: -100,
@@ -185,8 +185,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should update the min time between updates', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).one()
     await em.persistAndFlush(stat)
@@ -213,8 +213,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should not update the internal name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).one()
     await em.persistAndFlush(stat)
@@ -241,7 +241,7 @@ describe('Game stat service - put', () => {
   })
 
   it('should not update a stat for a game the user does not have access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const stat = await new GameStatFactory([otherGame]).one()
@@ -257,8 +257,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should not update a non-existent stat', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).one()
 
@@ -272,8 +272,8 @@ describe('Game stat service - put', () => {
   })
 
   it('should gracefully handle mysql out of range errors', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: -600,

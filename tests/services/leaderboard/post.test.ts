@@ -4,7 +4,7 @@ import GameFactory from '../../fixtures/GameFactory'
 import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('Leaderboard service - post', () => {
@@ -12,8 +12,8 @@ describe('Leaderboard service - post', () => {
     UserType.ADMIN,
     UserType.DEV
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/leaderboards`)
@@ -40,7 +40,7 @@ describe('Leaderboard service - post', () => {
   })
 
   it('should not create a leaderboard for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)
@@ -65,8 +65,8 @@ describe('Leaderboard service - post', () => {
   })
 
   it('should not create a leaderboard with an invalid sort mode', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/leaderboards`)
@@ -82,8 +82,8 @@ describe('Leaderboard service - post', () => {
   })
 
   it('should not create a leaderboard with a duplicate internal name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({ internalName: 'highscores' })).one()
     await em.persistAndFlush(leaderboard)
@@ -102,10 +102,10 @@ describe('Leaderboard service - post', () => {
   })
 
   it('should create a leaderboard with a duplicate internal name for another game', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
-    const otherGame = await new GameFactory(organisation).one()
+    const otherGame = await new GameFactory(organization).one()
     const otherLeaderboard = await new LeaderboardFactory([otherGame]).state(() => ({ internalName: 'time-survived' })).one()
     await em.persistAndFlush(otherLeaderboard)
 

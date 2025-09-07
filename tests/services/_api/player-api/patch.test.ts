@@ -2,7 +2,7 @@ import { Collection } from '@mikro-orm/mysql'
 import request from 'supertest'
 import { APIKeyScope } from '../../../../src/entities/api-key'
 import PlayerFactory from '../../../fixtures/PlayerFactory'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import PlayerProp from '../../../../src/entities/player-prop'
 import PlayerGroupFactory from '../../../fixtures/PlayerGroupFactory'
 import PlayerGroupRule, { PlayerGroupRuleCastType, PlayerGroupRuleName } from '../../../../src/entities/player-group-rule'
@@ -95,7 +95,7 @@ describe('Player API service - patch', () => {
   it('should not update a player from another game\'s properties', async () => {
     const [, token] = await createAPIKeyAndToken([APIKeyScope.WRITE_PLAYERS])
 
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const otherPlayer = await new PlayerFactory([otherGame]).one()
     await em.persistAndFlush(otherPlayer)
 

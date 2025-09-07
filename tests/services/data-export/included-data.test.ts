@@ -5,7 +5,7 @@ import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
 import LeaderboardEntryFactory from '../../fixtures/LeaderboardEntryFactory'
 import GameStatFactory from '../../fixtures/GameStatFactory'
 import PlayerGameStatFactory from '../../fixtures/PlayerGameStatFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import GameFeedbackFactory from '../../fixtures/GameFeedbackFactory'
 import GameStat from '../../../src/entities/game-stat'
 import { DataExporter } from '../../../src/lib/queues/data-exports/dataExportProcessor'
@@ -21,7 +21,7 @@ async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
 
 describe('Data export service - included data (unit tests)', () => {
   it('should not include events from dev build players without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -50,7 +50,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should include events from dev build players with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -79,7 +79,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should not include dev build players without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -93,7 +93,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should include dev build players with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -107,7 +107,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should not include dev build player aliases without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -121,7 +121,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should include dev build player aliases with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -135,7 +135,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should not include dev build player leaderboard entries without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -151,7 +151,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should include dev build player leaderboard entries with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -167,7 +167,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should recalculate global stat values without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -183,7 +183,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should not recalculate global stat values with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -199,7 +199,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should not include player stats from dev build players without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -215,7 +215,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should include player stats from dev build players with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -231,7 +231,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should not include feedback from dev build players without the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)
@@ -248,7 +248,7 @@ describe('Data export service - included data (unit tests)', () => {
   })
 
   it('should include player stats from dev build players with the dev data header', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const exporter = new DataExporter()
     const proto = Object.getPrototypeOf(exporter)

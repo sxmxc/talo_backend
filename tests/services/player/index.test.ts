@@ -2,7 +2,7 @@ import { Collection } from '@mikro-orm/mysql'
 import request from 'supertest'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import PlayerProp from '../../../src/entities/player-prop'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerGroupFactory from '../../fixtures/PlayerGroupFactory'
 import PlayerGroupRule, { PlayerGroupRuleCastType, PlayerGroupRuleName } from '../../../src/entities/player-group-rule'
@@ -10,8 +10,8 @@ import GameChannelFactory from '../../fixtures/GameChannelFactory'
 
 describe('Player service - index', () => {
   it('should return a list of players', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const num = await game.players.loadCount()
 
@@ -37,7 +37,7 @@ describe('Player service - index', () => {
   })
 
   it('should not return a list of players for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await request(app)
@@ -48,8 +48,8 @@ describe('Player service - index', () => {
   })
 
   it('should filter players by props', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const players = await new PlayerFactory([game]).state((player) => ({
       props: new Collection<PlayerProp>(player, [
@@ -71,8 +71,8 @@ describe('Player service - index', () => {
   })
 
   it('should filter players by aliases', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const player = await new PlayerFactory([game]).one()
     const otherPlayers = await new PlayerFactory([game]).many(3)
@@ -89,8 +89,8 @@ describe('Player service - index', () => {
   })
 
   it('should filter players by id', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const player = await new PlayerFactory([game]).state(() => ({ id: 'abc12345678' })).one()
     const otherPlayers = await new PlayerFactory([game]).many(3)
@@ -107,8 +107,8 @@ describe('Player service - index', () => {
   })
 
   it('should paginate results when getting players', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const players = await new PlayerFactory([game]).many(36)
     await em.persistAndFlush(players)
@@ -127,8 +127,8 @@ describe('Player service - index', () => {
   })
 
   it('should not return dev build players without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const players = await new PlayerFactory([game]).devBuild().many(5)
     await em.persistAndFlush(players)
@@ -143,8 +143,8 @@ describe('Player service - index', () => {
   })
 
   it('should return dev build players with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const players = await new PlayerFactory([game]).devBuild().many(5)
     await em.persistAndFlush(players)
@@ -160,8 +160,8 @@ describe('Player service - index', () => {
   })
 
   it('should filter players by groups', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const player = await new PlayerFactory([game]).state(() => ({ lastSeenAt: new Date(2022, 1, 1) })).one()
     const otherPlayers = await new PlayerFactory([game]).state(() => ({ lastSeenAt: new Date(2023, 1, 1) })).many(3)
@@ -184,8 +184,8 @@ describe('Player service - index', () => {
   })
 
   it('should filter players by channels', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ organisation })
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ organization })
 
     const player = await new PlayerFactory([game]).one()
     const otherPlayers = await new PlayerFactory([game]).many(3)

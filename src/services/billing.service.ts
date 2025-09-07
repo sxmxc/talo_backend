@@ -3,7 +3,7 @@ import { EntityManager } from '@mikro-orm/mysql'
 import { HasPermission, Service, Request, Response, Route, Validate } from 'koa-clay'
 import PricingPlan from '../entities/pricing-plan'
 import BillingPolicy from '../policies/billing.policy'
-import Organisation from '../entities/organisation'
+import Organization from '../entities/organization'
 import { isSameHour } from 'date-fns'
 import initStripe from '../lib/billing/initStripe'
 import getUserFromToken from '../lib/auth/getUserFromToken'
@@ -33,7 +33,7 @@ export default class BillingService extends Service {
 
     const pricingPlanProducts: PricingPlanProduct[] = []
     const user = await getUserFromToken(req.ctx)
-    const organisation: Organisation = user.organisation
+    const organization: Organization = user.organization
 
     if (!stripe) {
       return {
@@ -59,7 +59,7 @@ export default class BillingService extends Service {
           amount: price.unit_amount ?? 0, // handle null case by defaulting to 0
           currency: price.currency,
           interval: price.recurring!.interval,
-          current: price.id === organisation.pricingPlan.stripePriceId
+          current: price.id === organization.pricingPlan.stripePriceId
         }))
       })
     }
@@ -78,8 +78,8 @@ export default class BillingService extends Service {
 
     const prorationDate = Math.floor(Date.now() / 1000)
 
-    const organisation: Organisation = req.ctx.state.user.organisation
-    const subscriptions = await stripe.subscriptions.list({ customer: organisation.pricingPlan.stripeCustomerId!  })
+    const organization: Organization = req.ctx.state.user.organization
+    const subscriptions = await stripe.subscriptions.list({ customer: organization.pricingPlan.stripeCustomerId!  })
     const subscription = subscriptions.data[0]
 
     const items = [{
@@ -88,7 +88,7 @@ export default class BillingService extends Service {
     }]
 
     const invoice = await stripe.invoices.createPreview({
-      customer: organisation.pricingPlan.stripeCustomerId!,
+      customer: organization.pricingPlan.stripeCustomerId!,
       subscription: subscription.id,
       subscription_details: {
         items,
@@ -112,13 +112,13 @@ export default class BillingService extends Service {
   private async checkCanDowngrade(em: EntityManager, req: Request, newPlan: PricingPlan): Promise<void> {
     const planPlayerLimit = newPlan.playerLimit ?? Infinity
 
-    const organisation: Organisation = req.ctx.state.user.organisation
+    const organization: Organization = req.ctx.state.user.organization
     const playerCount = await em.getRepository(Player).count({
-      game: { organisation }
+      game: { organization }
     })
 
     if (playerCount >= planPlayerLimit) {
-      req.ctx.throw(400, 'You cannot downgrade your plan because your organisation has reached its player limit.')
+      req.ctx.throw(400, 'You cannot downgrade your plan because your organization has reached its player limit.')
     }
   }
 
@@ -155,16 +155,16 @@ export default class BillingService extends Service {
 
     const price = await this.getPrice(req)
 
-    const organisation: Organisation = req.ctx.state.user.organisation
+    const organization: Organization = req.ctx.state.user.organization
 
-    if (organisation.pricingPlan.stripeCustomerId) {
+    if (organization.pricingPlan.stripeCustomerId) {
       const subscriptions = await stripe.subscriptions.list({
-        customer: organisation.pricingPlan.stripeCustomerId,
+        customer: organization.pricingPlan.stripeCustomerId,
         status: 'active'
       })
 
       // this comparison isn't needed in the real world, but the stripe mock doesn't correctly filter by customer
-      if (subscriptions.data[0]?.customer === organisation.pricingPlan.stripeCustomerId) {
+      if (subscriptions.data[0]?.customer === organization.pricingPlan.stripeCustomerId) {
         return this.previewPlan(req, price)
       }
     }
@@ -176,12 +176,12 @@ export default class BillingService extends Service {
         quantity: 1
       }],
       mode: 'subscription',
-      customer: organisation.pricingPlan.stripeCustomerId ?? (await stripe.customers.create()).id,
+      customer: organization.pricingPlan.stripeCustomerId ?? (await stripe.customers.create()).id,
       success_url: `${process.env.DASHBOARD_URL}/billing?new_plan=${pricingPlanId}`,
       cancel_url: `${process.env.DASHBOARD_URL}/billing`
     })
 
-    organisation.pricingPlan.stripeCustomerId = session.customer as string
+    organization.pricingPlan.stripeCustomerId = session.customer as string
     await em.flush()
 
     return {
@@ -205,12 +205,12 @@ export default class BillingService extends Service {
     const { prorationDate } = req.body
     if (!isSameHour(new Date(), new Date(prorationDate * 1000))) req.ctx.throw(400)
 
-    const organisation: Organisation = req.ctx.state.user.organisation
-    if (!organisation.pricingPlan.stripeCustomerId) req.ctx.throw(400) // should already be on a plan before preview/confirming another
+    const organization: Organization = req.ctx.state.user.organization
+    if (!organization.pricingPlan.stripeCustomerId) req.ctx.throw(400) // should already be on a plan before preview/confirming another
 
     const price = await this.getPrice(req)
 
-    const subscriptions = await stripe.subscriptions.list({ customer: organisation.pricingPlan.stripeCustomerId  })
+    const subscriptions = await stripe.subscriptions.list({ customer: organization.pricingPlan.stripeCustomerId  })
     const subscription = subscriptions.data[0]
 
     await stripe.subscriptions.update(
@@ -239,8 +239,8 @@ export default class BillingService extends Service {
     /* v8 ignore next */
     if (!stripe) req.ctx.throw(405)
 
-    const organisation: Organisation = req.ctx.state.user.organisation
-    const stripeCustomerId = organisation.pricingPlan.stripeCustomerId
+    const organization: Organization = req.ctx.state.user.organization
+    const stripeCustomerId = organization.pricingPlan.stripeCustomerId
 
     if (!stripeCustomerId) req.ctx.throw(400)
 
@@ -265,9 +265,9 @@ export default class BillingService extends Service {
   async usage(req: Request): Promise<Response> {
     const em: EntityManager = req.ctx.em
 
-    const organisation: Organisation = req.ctx.state.user.organisation
-    const playerLimit = organisation.pricingPlan.pricingPlan.playerLimit
-    const playerCount = await getBillablePlayerCount(em, organisation)
+    const organization: Organization = req.ctx.state.user.organization
+    const playerLimit = organization.pricingPlan.pricingPlan.playerLimit
+    const playerCount = await getBillablePlayerCount(em, organization)
 
     return {
       status: 200,
@@ -282,16 +282,16 @@ export default class BillingService extends Service {
 
   @Route({
     method: 'GET',
-    path: '/organisation-plan'
+    path: '/organization-plan'
   })
-  @HasPermission(BillingPolicy, 'organisationPlan')
-  async organisationPlan(req: Request): Promise<Response> {
-    const organisation: Organisation = req.ctx.state.user.organisation
+  @HasPermission(BillingPolicy, 'organizationPlan')
+  async organizationPlan(req: Request): Promise<Response> {
+    const organization: Organization = req.ctx.state.user.organization
 
     return {
       status: 200,
       body: {
-        pricingPlan: organisation.pricingPlan
+        pricingPlan: organization.pricingPlan
       }
     }
   }

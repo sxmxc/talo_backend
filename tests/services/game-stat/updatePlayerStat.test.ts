@@ -3,7 +3,7 @@ import { UserType } from '../../../src/entities/user'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameStatFactory from '../../fixtures/GameStatFactory'
 import PlayerGameStatFactory from '../../fixtures/PlayerGameStatFactory'
@@ -22,8 +22,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it.each(userPermissionProvider([UserType.ADMIN]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: null,
@@ -62,8 +62,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should update global value for global stats', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: 0,
@@ -87,8 +87,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should not update a player stat if it would go below the minValue', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: 0
@@ -110,8 +110,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should not update a player stat if it would go above the maxValue', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       maxValue: 100
@@ -133,8 +133,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should update a player stat if the new value is within min/max constraints', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({
       minValue: 0,
@@ -163,8 +163,8 @@ describe('Game stat service - updatePlayerStat', () => {
     }])
     axiosMock.onPost('https://partner.steam-api.com/ISteamUserStats/SetUserStatsForGame/v1').replyOnce(setMock)
 
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).state(() => ({ maxChange: 99, maxValue: 3000 })).one()
     const player = await new PlayerFactory([game]).withSteamAlias().one()
@@ -191,7 +191,7 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should not update stats for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const stat = await new GameStatFactory([otherGame]).one()
@@ -208,8 +208,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should not update a player stat if it does not exist', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).one()
     const player = await new PlayerFactory([game]).one()
@@ -228,8 +228,8 @@ describe('Game stat service - updatePlayerStat', () => {
   })
 
   it('should not update a player stat if the stat does not exist', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const stat = await new GameStatFactory([game]).one()
     const player = await new PlayerFactory([game]).one()

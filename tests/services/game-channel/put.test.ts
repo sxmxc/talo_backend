@@ -1,5 +1,5 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import GameChannelFactory from '../../fixtures/GameChannelFactory'
@@ -8,8 +8,8 @@ import PlayerFactory from '../../fixtures/PlayerFactory'
 
 describe('Game channel service - put', () => {
   it('should update a game channel', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).one()
     await em.persistAndFlush(channel)
@@ -34,7 +34,7 @@ describe('Game channel service - put', () => {
   })
 
   it('should not update a game channel the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const channel = await new GameChannelFactory(game).one()
@@ -50,7 +50,7 @@ describe('Game channel service - put', () => {
   })
 
   it('should not update a game channel for a non-existent game', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const channel = await new GameChannelFactory(game).one()
@@ -66,7 +66,7 @@ describe('Game channel service - put', () => {
   })
 
   it('should not update a non-existent game channel', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)
@@ -79,8 +79,8 @@ describe('Game channel service - put', () => {
   })
 
   it('should not update owner to a non-existent player alias', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).one()
     await em.persistAndFlush(channel)
@@ -95,8 +95,8 @@ describe('Game channel service - put', () => {
   })
 
   it('should add the new owner to members if not already a member', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).one()
     const player = await new PlayerFactory([game]).one()
@@ -114,8 +114,8 @@ describe('Game channel service - put', () => {
   })
 
   it('should not update the channel name when set to whitespace', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).one()
     await em.persistAndFlush(channel)
@@ -133,8 +133,8 @@ describe('Game channel service - put', () => {
   })
 
   it('should update the autoCleanup property', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).state(() => ({ autoCleanup: false })).one()
     await em.persistAndFlush(channel)
@@ -149,8 +149,8 @@ describe('Game channel service - put', () => {
   })
 
   it('should update the private property', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).state(() => ({ private: false })).one()
     await em.persistAndFlush(channel)
@@ -165,8 +165,8 @@ describe('Game channel service - put', () => {
   })
 
   it('should update the temporaryMembership property', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const channel = await new GameChannelFactory(game).state(() => ({ temporaryMembership: false })).one()
     await em.persistAndFlush(channel)

@@ -1,15 +1,15 @@
 import { Entity, ManyToOne, OneToOne, PrimaryKey, Property } from '@mikro-orm/mysql'
 import Stripe from 'stripe'
-import Organisation from './organisation'
+import Organization from './organization'
 import PricingPlan from './pricing-plan'
 
 @Entity()
-export default class OrganisationPricingPlan {
+export default class OrganizationPricingPlan {
   @PrimaryKey()
   id!: number
 
-  @OneToOne(() => Organisation, (organisation) => organisation.pricingPlan)
-  organisation!: Organisation
+  @OneToOne(() => Organization, (organization) => organization.pricingPlan)
+  organization!: Organization
 
   @ManyToOne(() => PricingPlan, { eager: true })
   pricingPlan: PricingPlan
@@ -32,8 +32,8 @@ export default class OrganisationPricingPlan {
   @Property({ onUpdate: () => new Date() })
   updatedAt: Date = new Date()
 
-  constructor(organisation: Organisation, pricingPlan: PricingPlan) {
-    this.organisation = organisation
+  constructor(organization: Organization, pricingPlan: PricingPlan) {
+    this.organization = organization
     this.pricingPlan = pricingPlan
   }
 

@@ -3,13 +3,13 @@ import GameStatFactory from '../../fixtures/GameStatFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import PlayerGameStatFactory from '../../fixtures/PlayerGameStatFactory'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import PlayerGameStatSnapshot from '../../../src/entities/player-game-stat-snapshot'
 
 describe('Game stat service - index', () => {
   it('should return a list of game stats', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stats = await new GameStatFactory([game]).many(3)
     await em.persistAndFlush([game, ...stats])
@@ -23,7 +23,7 @@ describe('Game stat service - index', () => {
   })
 
   it('should not return a list of game stats for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const stats = await new GameStatFactory([game]).many(3)
@@ -36,8 +36,8 @@ describe('Game stat service - index', () => {
   })
 
   it('should recalculate global stat values without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).global().state(() => ({ globalValue: 50 })).one()
 
@@ -58,8 +58,8 @@ describe('Game stat service - index', () => {
   })
 
   it('should not recalculate global stat values with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     const stat = await new GameStatFactory([game]).global().state(() => ({ globalValue: 50 })).one()
@@ -76,8 +76,8 @@ describe('Game stat service - index', () => {
   })
 
   it('should load metrics filtered by startDate', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).global().state(() => ({ globalValue: 0 })).one()
     const player = await new PlayerFactory([game]).one()
@@ -121,8 +121,8 @@ describe('Game stat service - index', () => {
   })
 
   it('should load metrics filtered by endDate', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).global().state(() => ({ globalValue: 0 })).one()
     const player = await new PlayerFactory([game]).one()
@@ -166,8 +166,8 @@ describe('Game stat service - index', () => {
   })
 
   it('should load metrics filtered by both startDate and endDate', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const stat = await new GameStatFactory([game]).global().state(() => ({ globalValue: 0 })).one()
     const player = await new PlayerFactory([game]).one()
