@@ -1,14 +1,14 @@
 import request from 'supertest'
 import initStripe from '../../../src/lib/billing/initStripe'
 import PricingPlanFactory from '../../fixtures/PricingPlanFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
 
 const stripe = initStripe()!
 
-describe('Billing service - organisation plan', () => {
+describe('Billing service - organization plan', () => {
   it.each(userPermissionProvider())('should return a %i for a %s user', async (statusCode, _, type) => {
     const product = (await stripe.products.list()).data[0]
     const price = (await stripe.prices.list({ product: product.id })).data[0]
@@ -16,15 +16,15 @@ describe('Billing service - organisation plan', () => {
 
     const subscription = (await stripe.subscriptions.list()).data[0]
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({ type }, organization)
 
-    organisation.pricingPlan.stripeCustomerId = subscription.customer as string
-    organisation.pricingPlan.stripePriceId = price.id
+    organization.pricingPlan.stripeCustomerId = subscription.customer as string
+    organization.pricingPlan.stripePriceId = price.id
     await em.flush()
 
     const res = await request(app)
-      .get('/billing/organisation-plan')
+      .get('/billing/organization-plan')
       .auth(token, { type: 'bearer' })
       .expect(statusCode)
 
@@ -32,21 +32,21 @@ describe('Billing service - organisation plan', () => {
       expect(res.body.pricingPlan).toBeDefined()
       expect(res.body.pricingPlan.canViewBillingPortal).toBe(true)
     } else {
-      expect(res.body).toStrictEqual({ message: 'You do not have permissions to view the organisation pricing plan' })
+      expect(res.body).toStrictEqual({ message: 'You do not have permissions to view the organization pricing plan' })
     }
   })
 
   it('should not let them view the billing portal if there is no stripeCustomerId', async () => {
     const plan = await new PricingPlanFactory().one()
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
-    organisation.pricingPlan.stripeCustomerId = null
-    organisation.pricingPlan.stripePriceId = null
+    organization.pricingPlan.stripeCustomerId = null
+    organization.pricingPlan.stripePriceId = null
     await em.flush()
 
     const res = await request(app)
-      .get('/billing/organisation-plan')
+      .get('/billing/organization-plan')
       .auth(token, { type: 'bearer' })
       .expect(200)
 

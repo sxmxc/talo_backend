@@ -1,5 +1,5 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import initStripe from '../../../../src/lib/billing/initStripe'
 import PricingPlanFactory from '../../../fixtures/PricingPlanFactory'
 import { v4 } from 'uuid'
@@ -7,13 +7,13 @@ import { v4 } from 'uuid'
 const stripe = initStripe()!
 
 describe('Webhook service - subscription deleted', () => {
-  it('should reset the organisation pricing plan to the default plan after the subscription is deleted', async () => {
-    const [organisation] = await createOrganisationAndGame()
+  it('should reset the organization pricing plan to the default plan after the subscription is deleted', async () => {
+    const [organization] = await createOrganizationAndGame()
     const subscription = (await stripe.subscriptions.list()).data[0]
     const price = (await stripe.prices.list()).data[0]
 
-    organisation.pricingPlan.stripeCustomerId = subscription.customer as string
-    organisation.pricingPlan.stripePriceId = price.id
+    organization.pricingPlan.stripeCustomerId = subscription.customer as string
+    organization.pricingPlan.stripePriceId = price.id
 
     const defaultPlan = await new PricingPlanFactory().state(() => ({ default: true })).one()
     await em.persistAndFlush(defaultPlan)
@@ -43,7 +43,7 @@ describe('Webhook service - subscription deleted', () => {
       .send(payload)
       .expect(204)
 
-    await em.refresh(organisation)
-    expect(organisation.pricingPlan.pricingPlan.id).toBe(defaultPlan.id)
+    await em.refresh(organization)
+    expect(organization.pricingPlan.pricingPlan.id).toBe(defaultPlan.id)
   })
 })

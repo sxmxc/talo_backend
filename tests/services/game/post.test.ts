@@ -20,8 +20,8 @@ describe('Game service - post', () => {
     if (statusCode === 200) {
       expect(res.body.game.name).toBe('Twodoors')
 
-      const game = await em.getRepository(Game).findOneOrFail(res.body.game.id, { populate: ['organisation'] })
-      expect(game.organisation.id).toBe(user.organisation.id)
+      const game = await em.getRepository(Game).findOneOrFail(res.body.game.id, { populate: ['organization'] })
+      expect(game.organization.id).toBe(user.organization.id)
     } else {
       expect(res.body).toStrictEqual({ message: 'You do not have permissions to create games' })
     }

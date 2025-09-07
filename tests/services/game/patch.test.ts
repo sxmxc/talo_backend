@@ -2,7 +2,7 @@ import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import createTestSocket from '../../utils/createTestSocket'
 import createSocketIdentifyMessage from '../../utils/createSocketIdentifyMessage'
@@ -15,13 +15,13 @@ describe('Game service - patch', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame({}, {
+    const [organization, game] = await createOrganizationAndGame({}, {
       props: [
         { key: 'xpRate', value: '1' },
         { key: 'halloweenEventEnabled', value: '0' }
       ]
     })
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [token] = await createUserAndToken({ type }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)
@@ -62,13 +62,13 @@ describe('Game service - patch', () => {
   })
 
   it('should delete null player properties', async () => {
-    const [organisation, game] = await createOrganisationAndGame({}, {
+    const [organization, game] = await createOrganizationAndGame({}, {
       props: [
         { key: 'xpRate', value: '1' },
         { key: 'halloweenEventEnabled', value: '0' }
       ]
     })
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)
@@ -96,8 +96,8 @@ describe('Game service - patch', () => {
   })
 
   it('should not update a non-existent game\'s properties', async () => {
-    const [organisation] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .patch('/games/2313')
@@ -116,7 +116,7 @@ describe('Game service - patch', () => {
   })
 
   it('should not update a player\'s properties for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const res = await request(app)
@@ -136,8 +136,8 @@ describe('Game service - patch', () => {
   })
 
   it('should reject keys starting with META_', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)
@@ -160,8 +160,8 @@ describe('Game service - patch', () => {
   })
 
   it('should update game names', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)
@@ -255,8 +255,8 @@ describe('Game service - patch', () => {
   })
 
   it('should reject props where the key is greater than 128 characters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)
@@ -279,8 +279,8 @@ describe('Game service - patch', () => {
   })
 
   it('should reject props where the value is greater than 512 characters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)
@@ -303,8 +303,8 @@ describe('Game service - patch', () => {
   })
 
   it.each(userPermissionProvider([]))('should update purgeDevPlayers for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     await request(app)
       .patch(`/games/${game.id}`)
@@ -318,8 +318,8 @@ describe('Game service - patch', () => {
   })
 
   it.each(userPermissionProvider([]))('should update purgeLivePlayers for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     await request(app)
       .patch(`/games/${game.id}`)
@@ -333,8 +333,8 @@ describe('Game service - patch', () => {
   })
 
   it.each(userPermissionProvider([]))('should update the website for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const website = 'https://example.com'
     await request(app)
@@ -349,8 +349,8 @@ describe('Game service - patch', () => {
   })
 
   it.each(userPermissionProvider([]))('should update purgeDevPlayersRetention for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     await request(app)
       .patch(`/games/${game.id}`)
@@ -364,8 +364,8 @@ describe('Game service - patch', () => {
   })
 
   it.each(userPermissionProvider([]))('should update purgeLivePlayersRetention for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     await request(app)
       .patch(`/games/${game.id}`)
@@ -379,8 +379,8 @@ describe('Game service - patch', () => {
   })
 
   it('should not update game names if an empty string is sent', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .patch(`/games/${game.id}`)

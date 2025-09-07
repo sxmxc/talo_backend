@@ -1,13 +1,13 @@
 import request from 'supertest'
 import PlayerGroupFactory from '../../fixtures/PlayerGroupFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerGroup from '../../../src/entities/player-group'
 
 describe('Player group service - index', () => {
   it('should return a list of groups', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const groups = await new PlayerGroupFactory().construct(game).many(3)
     await em.persistAndFlush(groups)
@@ -37,7 +37,7 @@ describe('Player group service - index', () => {
   })
 
   it('should not return groups for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await request(app)

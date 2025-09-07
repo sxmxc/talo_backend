@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt'
 import buildTokenPair, { genAccessToken } from '../../lib/auth/buildTokenPair'
 import setUserLastSeenAt from '../../lib/users/setUserLastSeenAt'
 import UserAccessCode from '../../entities/user-access-code'
-import Organisation from '../../entities/organisation'
+import Organization from '../../entities/organization'
 import { add } from 'date-fns'
 import { authenticator } from '@otplib/preset-default'
 import UserRecoveryCode from '../../entities/user-recovery-code'
@@ -60,17 +60,17 @@ export default class UserPublicService extends Service {
       password: {
         required: true
       },
-      organisationName: {
+      organizationName: {
         requiredIf: async (req: Request) => !req.body.inviteToken
       },
       inviteToken: {
-        requiredIf: async (req: Request) => !req.body.organisationName
+        requiredIf: async (req: Request) => !req.body.organizationName
       }
     }
   })
   @After(sendEmailConfirm)
   async register(req: Request): Promise<Response> {
-    const { email, username, password, organisationName, inviteToken } = req.body
+    const { email, username, password, organizationName, inviteToken } = req.body
     const em: EntityManager = req.ctx.em
 
     const registrationMode = process.env.REGISTRATION_MODE || 'open'
@@ -82,7 +82,7 @@ export default class UserPublicService extends Service {
     }
 
     const userWithEmail = await em.getRepository(User).findOne({ email })
-    const orgWithEmail = await em.getRepository(Organisation).findOne({ email })
+    const orgWithEmail = await em.getRepository(Organization).findOne({ email })
     if (userWithEmail || orgWithEmail) req.ctx.throw(400, 'Email address is already in use')
 
     const user = new User()
@@ -95,12 +95,12 @@ export default class UserPublicService extends Service {
       const invite = await em.getRepository(Invite).findOne({
         token: inviteToken
       }, {
-        populate: ['organisation.games']
+        populate: ['organization.games']
       })
 
       if (!invite || invite.email !== email) req.ctx.throw(404, 'Invite not found')
 
-      user.organisation = invite.organisation
+      user.organization = invite.organization
       user.type = invite.type
       user.emailConfirmed = true
 
@@ -108,18 +108,18 @@ export default class UserPublicService extends Service {
 
       em.remove(invite)
     } else {
-      const organisation = new Organisation()
-      organisation.email = email
-      organisation.name = organisationName
-      organisation.pricingPlan = await createDefaultPricingPlan(em, organisation)
+      const organization = new Organization()
+      organization.email = email
+      organization.name = organizationName
+      organization.pricingPlan = await createDefaultPricingPlan(em, organization)
 
-      user.organisation = organisation
+      user.organization = organization
       user.type = UserType.OWNER
     }
 
     req.ctx.state.user = user
     await em.persistAndFlush(user)
-    await em.populate(user, ['organisation'])
+    await em.populate(user, ['organization'])
 
     const accessToken = await buildTokenPair(req.ctx, user)
 
@@ -148,7 +148,7 @@ export default class UserPublicService extends Service {
     const { email, password } = req.body
     const em: EntityManager = req.ctx.em
 
-    const user = await em.getRepository(User).findOne({ email }, { populate: ['organisation.games'] })
+    const user = await em.getRepository(User).findOne({ email }, { populate: ['organization.games'] })
     if (!user) this.handleFailedLogin(req)
 
     const passwordMatches = await bcrypt.compare(password, user!.password)
@@ -192,7 +192,7 @@ export default class UserPublicService extends Service {
       token,
       userAgent
     }, {
-      populate: ['user.organisation.games']
+      populate: ['user.organization.games']
     })
 
     if (!session) {
@@ -288,7 +288,7 @@ export default class UserPublicService extends Service {
     const { code, userId } = req.body
     const em: EntityManager = req.ctx.em
 
-    const user = await em.repo(User).findOneOrFail(userId, { populate: ['organisation.games'] })
+    const user = await em.repo(User).findOneOrFail(userId, { populate: ['organization.games'] })
 
     const redis: Redis = req.ctx.redis
     const hasSession = (await redis.get(`2fa:${user.id}`)) === 'true'
@@ -325,7 +325,7 @@ export default class UserPublicService extends Service {
     const em: EntityManager = req.ctx.em
 
     const user = await em.getRepository(User).findOneOrFail(userId, {
-      populate: ['recoveryCodes', 'organisation.games']
+      populate: ['recoveryCodes', 'organization.games']
     })
 
     const redis: Redis = req.ctx.redis

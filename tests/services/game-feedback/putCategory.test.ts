@@ -1,13 +1,13 @@
 import request from 'supertest'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameFeedbackCategoryFactory from '../../fixtures/GameFeedbackCategoryFactory'
 
 describe('Game feedback service - put category', () => {
   it('should update the name and description', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const feedbackCategory = await new GameFeedbackCategoryFactory(game).state(() => ({ anonymised: false })).one()
     await em.persistAndFlush(feedbackCategory)
@@ -35,8 +35,8 @@ describe('Game feedback service - put category', () => {
   })
 
   it('should update the anonymisation', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const feedbackCategory = await new GameFeedbackCategoryFactory(game).state(() => ({
       name: 'Bugs',
@@ -68,8 +68,8 @@ describe('Game feedback service - put category', () => {
   })
 
   it('should not update the internal name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const feedbackCategory = await new GameFeedbackCategoryFactory(game).state(() => ({ anonymised: false })).one()
     await em.persistAndFlush(feedbackCategory)
@@ -96,7 +96,7 @@ describe('Game feedback service - put category', () => {
   })
 
   it('should not update a feedback category for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)
@@ -109,8 +109,8 @@ describe('Game feedback service - put category', () => {
   })
 
   it('should not update a non-existent feedback category', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .put(`/games/${game.id}/game-feedback/categories/999999`)

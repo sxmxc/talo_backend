@@ -11,7 +11,7 @@ export default class InviteFactory extends Factory<Invite> {
 
   protected definition(): void {
     this.state(async (invite) => {
-      const invitedByUser = await new UserFactory().state(() => ({ organisation: invite.organisation })).one()
+      const invitedByUser = await new UserFactory().state(() => ({ organization: invite.organization })).one()
 
       return {
         email: randEmail(),

@@ -3,12 +3,12 @@ import EventFactory from '../../fixtures/EventFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import { addDays, sub } from 'date-fns'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 
 describe('Event service - index', () => {
   it('should return a list of events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const now = new Date('2021-01-01')
@@ -49,8 +49,8 @@ describe('Event service - index', () => {
   })
 
   it('should require a startDate query key to get events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/events`)
@@ -66,8 +66,8 @@ describe('Event service - index', () => {
   })
 
   it('should require a valid startDate query key to get events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/events`)
@@ -83,8 +83,8 @@ describe('Event service - index', () => {
   })
 
   it('should require a startDate that comes before the endDate query key to get events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/events`)
@@ -100,8 +100,8 @@ describe('Event service - index', () => {
   })
 
   it('should require a endDate query key to get events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/events`)
@@ -117,8 +117,8 @@ describe('Event service - index', () => {
   })
 
   it('should require a valid endDate query key to get events', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/events`)
@@ -134,8 +134,8 @@ describe('Event service - index', () => {
   })
 
   it('should correctly calculate event changes', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const now = new Date('2021-01-01')
@@ -186,8 +186,8 @@ describe('Event service - index', () => {
   })
 
   it('should mark the change between 0 events and 1 event as 100%', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const now = new Date('2021-01-01')
@@ -228,7 +228,7 @@ describe('Event service - index', () => {
   })
 
   it('should not return a list of events for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await request(app)
@@ -239,8 +239,8 @@ describe('Event service - index', () => {
   })
 
   it('should return events from today if the endDate is today', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const events = await new EventFactory([player]).state(() => ({ name: 'Talk to NPC', createdAt: new Date() })).many(3)
@@ -261,8 +261,8 @@ describe('Event service - index', () => {
   })
 
   it('should not return events by dev build players if the dev data header is not set', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     const events = await new EventFactory([player]).state(() => ({ name: 'Talk to NPC', createdAt: new Date() })).many(3)
@@ -283,8 +283,8 @@ describe('Event service - index', () => {
   })
 
   it('should return events by dev build players if the dev data header is set', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     const events = await new EventFactory([player]).state(() => ({ name: 'Talk to NPC', createdAt: new Date() })).many(3)

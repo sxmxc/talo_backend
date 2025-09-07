@@ -1,7 +1,7 @@
 import request from 'supertest'
 import initStripe from '../../../src/lib/billing/initStripe'
 import PricingPlanFactory from '../../fixtures/PricingPlanFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 const stripe = initStripe()!
@@ -12,9 +12,9 @@ describe('Billing service - plans', () => {
     const price = (await stripe.prices.list({ product: product.id })).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.stripePriceId = price.id
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.stripePriceId = price.id
     await em.flush()
 
     const res = await request(app)
@@ -40,9 +40,9 @@ describe('Billing service - plans', () => {
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
     const hiddenPlan = await new PricingPlanFactory().state(() => ({ hidden: true })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.stripePriceId = price.id
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.stripePriceId = price.id
     await em.persistAndFlush(hiddenPlan)
 
     const res = await request(app)

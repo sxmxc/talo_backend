@@ -3,7 +3,7 @@ import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import LeaderboardEntryFactory from '../../fixtures/LeaderboardEntryFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import { UserType } from '../../../src/entities/user'
 import userPermissionProvider from '../../utils/userPermissionProvider'
@@ -12,8 +12,8 @@ describe('Leaderboard service - update entry', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ]))('should mark a leaderboard entry as hidden with %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const players = await new PlayerFactory([game]).many(10)
@@ -47,8 +47,8 @@ describe('Leaderboard service - update entry', () => {
   })
 
   it('should mark an entry as unhidden', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const players = await new PlayerFactory([game]).many(10)
@@ -79,8 +79,8 @@ describe('Leaderboard service - update entry', () => {
   })
 
   it('should not mark an entry as unhidden if the hidden property isn\'t sent', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const players = await new PlayerFactory([game]).many(10)
@@ -111,8 +111,8 @@ describe('Leaderboard service - update entry', () => {
   })
 
   it('should not update a non-existent entry', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     await em.persistAndFlush(leaderboard)
@@ -127,8 +127,8 @@ describe('Leaderboard service - update entry', () => {
   })
 
   it('should update a leaderboard entry\'s score', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const players = await new PlayerFactory([game]).many(10)

@@ -42,14 +42,14 @@ export default class Policy extends ServicePolicy {
   async canAccessGame(gameId: number): Promise<boolean> {
     const game = await this.em.repo(Game).findOne(gameId, {
       ...getResultCacheOptions(`can-access-game-${gameId}`, 600_000),
-      populate: ['organisation.id']
+      populate: ['organization.id']
     })
 
     if (!game) this.ctx.throw(404, 'Game not found')
     this.ctx.state.game = game
 
     const user = await this.getUser()
-    return game.organisation.id === user.organisation.id
+    return game.organization.id === user.organization.id
   }
 
   async hasScope(scope: APIKeyScope): Promise<PolicyResponse> {

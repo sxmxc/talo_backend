@@ -1,6 +1,6 @@
 import * as sendEmail from '../../../../src/lib/messaging/sendEmail'
 import DataExportFactory from '../../../fixtures/DataExportFactory'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import { DataExportMailer } from '../../../../src/lib/queues/data-exports/dataExportMailer'
 import fs from 'fs'
 import fsp from 'fs/promises'
@@ -22,7 +22,7 @@ describe('DataExportMailer', () => {
   it('should correctly update the data export status if sending the email succeeds', async () => {
     vi.spyOn(sendEmail, 'default').mockResolvedValueOnce()
 
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const dataExport = await new DataExportFactory(game).one()
     await em.persistAndFlush(dataExport)
 
@@ -36,7 +36,7 @@ describe('DataExportMailer', () => {
   it('should correctly update the data export status if sending the email fails', async () => {
     vi.spyOn(sendEmail, 'default').mockRejectedValueOnce(new Error())
 
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const dataExport = await new DataExportFactory(game).one()
     await em.persistAndFlush(dataExport)
 

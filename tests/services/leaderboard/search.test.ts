@@ -1,15 +1,15 @@
 import request from 'supertest'
 import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('Leaderboard service - search', () => {
   it('should return a leaderboard with the same internalName', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
+    const [organization, game] = await createOrganizationAndGame()
     const leaderboard = await new LeaderboardFactory([game]).one()
     await em.persistAndFlush(leaderboard)
 
-    const [token] = await createUserAndToken({}, organisation)
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/leaderboards/search?internalName=${leaderboard.internalName}`)
@@ -31,12 +31,12 @@ describe('Leaderboard service - search', () => {
   })
 
   it('should not return leaderboards from another game', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [, otherGame] = await createOrganisationAndGame()
+    const [organization, game] = await createOrganizationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const leaderboard = await new LeaderboardFactory([otherGame]).one()
     await em.persistAndFlush(leaderboard)
 
-    const [token] = await createUserAndToken({}, organisation)
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/leaderboards/search?internalName=${leaderboard.internalName}`)

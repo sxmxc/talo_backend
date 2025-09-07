@@ -3,7 +3,7 @@ import { service, ServiceOpts } from 'koa-clay'
 import GameChannelService from '../services/game-channel.service'
 import GameFeedbackService from '../services/game-feedback.service'
 import PlayerGroupService from '../services/player-group.service'
-import OrganisationService from '../services/organisation.service'
+import OrganizationService from '../services/organization.service'
 import InviteService from '../services/invite.service'
 import GameStatService from '../services/game-stat.service'
 import GameActivityService from '../services/game-activity.service'
@@ -45,7 +45,7 @@ export default function protectedRoutes(app: Koa) {
     }
   }
   app.use(service('/billing', new BillingService(), serviceOpts))
-  app.use(service('/organisations', new OrganisationService(), serviceOpts))
+  app.use(service('/organizations', new OrganizationService(), serviceOpts))
   app.use(service('/invites', new InviteService(), serviceOpts))
   app.use(service('/games/:gameId/game-stats', new GameStatService(), serviceOpts))
   app.use(service('/games/:gameId/game-activities', new GameActivityService(), serviceOpts))

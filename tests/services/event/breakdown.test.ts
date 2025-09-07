@@ -3,12 +3,12 @@ import EventFactory from '../../fixtures/EventFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import { addDays, sub } from 'date-fns'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 
 describe('Event service - breakdown', () => {
   it('should return a breakdown of an event', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const now = new Date('2021-01-01')
@@ -72,8 +72,8 @@ describe('Event service - breakdown', () => {
   })
 
   it('should correctly calculate breakdown changes', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const now = new Date('2021-01-01')
@@ -155,7 +155,7 @@ describe('Event service - breakdown', () => {
   })
 
   it('should not return a breakdown for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await request(app)
@@ -166,8 +166,8 @@ describe('Event service - breakdown', () => {
   })
 
   it('should return event props from today if the endDate is today', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const events = await new EventFactory([player]).state(() => ({
@@ -200,8 +200,8 @@ describe('Event service - breakdown', () => {
   })
 
   it('should not return event props by dev build players if the dev data header is not set', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     const events = await new EventFactory([player]).state(() => ({
@@ -234,8 +234,8 @@ describe('Event service - breakdown', () => {
   })
 
   it('should return event props by dev build players if the dev data header is set', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().one()
     const events = await new EventFactory([player]).state(() => ({
@@ -269,8 +269,8 @@ describe('Event service - breakdown', () => {
   })
 
   it('should not return breakdowns for meta props', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     const now = new Date('2021-01-01')

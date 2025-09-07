@@ -1,6 +1,6 @@
 import PlayerFactory from '../fixtures/PlayerFactory'
 import { sub } from 'date-fns'
-import createOrganisationAndGame from '../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../utils/createOrganizationAndGame'
 import deleteInactivePlayers from '../../src/tasks/deleteInactivePlayers'
 import Player from '../../src/entities/player'
 import UserFactory from '../fixtures/UserFactory'
@@ -9,9 +9,9 @@ import PlayerPresenceFactory from '../fixtures/PlayerPresenceFactory'
 
 describe('deleteInactivePlayers', () => {
   it('should delete inactive dev players older than 60 days', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({
@@ -40,9 +40,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should delete inactive live players older than 90 days', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({
@@ -71,9 +71,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should delete players with auth', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({
@@ -89,9 +89,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should delete players with presence', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const presence = await new PlayerPresenceFactory(game).one()
@@ -106,9 +106,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should delete all player data in clickhouse', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(async () => ({
@@ -148,9 +148,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should not delete inactive dev players when purgeDevPlayers is false', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: false, purgeLivePlayers: true })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: false, purgeLivePlayers: true })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({
@@ -171,9 +171,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should not delete inactive live players when purgeLivePlayers is false', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: false })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: false })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({
@@ -194,9 +194,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should delete inactive dev players older than the dev players retention setting', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true, purgeDevPlayersRetention: 30 })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true, purgeDevPlayersRetention: 30 })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({
@@ -225,9 +225,9 @@ describe('deleteInactivePlayers', () => {
   })
 
   it('should delete inactive live players older than the live players retention', async () => {
-    const [, game] = await createOrganisationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true, purgeLivePlayersRetention: 60 })
+    const [, game] = await createOrganizationAndGame({}, { purgeDevPlayers: true, purgeLivePlayers: true, purgeLivePlayersRetention: 60 })
     const owner = await new UserFactory().owner().state(() => ({
-      organisation: game.organisation
+      organization: game.organization
     })).one()
 
     const player = await new PlayerFactory([game]).state(() => ({

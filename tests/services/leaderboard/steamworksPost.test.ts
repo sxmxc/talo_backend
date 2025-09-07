@@ -1,5 +1,5 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import IntegrationConfigFactory from '../../fixtures/IntegrationConfigFactory'
 import IntegrationFactory from '../../fixtures/IntegrationFactory'
@@ -22,8 +22,8 @@ describe('Leaderboard service - post - steamworks integration', () => {
   })
 
   it('should create a leaderboard in steamworks', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const createMock = vi.fn(() => [200, {
       result: {
@@ -68,8 +68,8 @@ describe('Leaderboard service - post - steamworks integration', () => {
   })
 
   it('should not create a leaderboard in steamworks if syncLeaderboards is false', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const createMock = vi.fn(() => [200, {}])
     axiosMock.onPost('https://partner.steam-api.com/ISteamLeaderboards/FindOrCreateLeaderboard/v2').replyOnce(createMock)
@@ -96,8 +96,8 @@ describe('Leaderboard service - post - steamworks integration', () => {
   })
 
   it('should not create a mapping if the leaderboard was not created in steamworks', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const createMock = vi.fn(() => [400, 'Required parameter \'appid\' is missing'])
     axiosMock.onPost('https://partner.steam-api.com/ISteamLeaderboards/FindOrCreateLeaderboard/v2').replyOnce(createMock)

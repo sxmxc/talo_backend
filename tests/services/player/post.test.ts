@@ -1,7 +1,7 @@
 import request from 'supertest'
 import PlayerGroupFactory from '../../fixtures/PlayerGroupFactory'
 import PlayerGroupRule, { PlayerGroupRuleCastType, PlayerGroupRuleName } from '../../../src/entities/player-group-rule'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import { randText, randUserName } from '@ngneat/falso'
@@ -9,8 +9,8 @@ import Player from '../../../src/entities/player'
 
 describe('Player service - post', () => {
   it('should create a player', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)
@@ -22,8 +22,8 @@ describe('Player service - post', () => {
   })
 
   it('should create a player with aliases', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)
@@ -43,8 +43,8 @@ describe('Player service - post', () => {
   })
 
   it('should create a player with props', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)
@@ -64,8 +64,8 @@ describe('Player service - post', () => {
   })
 
   it('should put the newly created player in the correct groups', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const rule = new PlayerGroupRule(PlayerGroupRuleName.LT, 'props.currentLevel')
     rule.castType = PlayerGroupRuleCastType.DOUBLE
@@ -108,7 +108,7 @@ describe('Player service - post', () => {
   })
 
   it('should not create a player for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     await request(app)
@@ -118,8 +118,8 @@ describe('Player service - post', () => {
   })
 
   it('should not create a player if props are in the incorrect format', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)
@@ -139,8 +139,8 @@ describe('Player service - post', () => {
   })
 
   it('should create a player with a META_DEV_BUILD prop and devBuild set to true', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const username = randUserName()
 
@@ -167,8 +167,8 @@ describe('Player service - post', () => {
   })
 
   it('should not create duplicate player aliases', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
@@ -191,10 +191,10 @@ describe('Player service - post', () => {
   })
 
   it('should create a player when hitting 100% of pricing plan limit', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
-    organisation.pricingPlan.pricingPlan.playerLimit = 20
+    organization.pricingPlan.pricingPlan.playerLimit = 20
     const players = await new PlayerFactory([game]).many(20)
     await em.persistAndFlush(players)
 
@@ -207,10 +207,10 @@ describe('Player service - post', () => {
   })
 
   it('should not create a player when going over 105% of pricing plan limit', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
-    organisation.pricingPlan.pricingPlan.playerLimit = 20
+    organization.pricingPlan.pricingPlan.playerLimit = 20
     const players = await new PlayerFactory([game]).many(21)
     await em.persistAndFlush(players)
 
@@ -226,10 +226,10 @@ describe('Player service - post', () => {
   })
 
   it('should create a player when under pricing plan limit', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
-    organisation.pricingPlan.pricingPlan.playerLimit = 2
+    organization.pricingPlan.pricingPlan.playerLimit = 2
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -242,8 +242,8 @@ describe('Player service - post', () => {
   })
 
   it('should reject props where the key is greater than 128 characters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)
@@ -266,8 +266,8 @@ describe('Player service - post', () => {
   })
 
   it('should reject props where the value is greater than 512 characters', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)
@@ -294,8 +294,8 @@ describe('Player service - post', () => {
       throw new Error('Unknown error')
     })
 
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/players`)

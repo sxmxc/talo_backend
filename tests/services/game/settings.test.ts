@@ -1,13 +1,13 @@
 import request from 'supertest'
 import { UserType } from '../../../src/entities/user'
 import userPermissionProvider from '../../utils/userPermissionProvider'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('Game service - settings', () => {
   it.each(userPermissionProvider([]))('should return settings for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     game.purgeDevPlayers = true
     game.purgeLivePlayers = false
@@ -33,8 +33,8 @@ describe('Game service - settings', () => {
   })
 
   it('should not return settings for a non-existent game', async () => {
-    const [organisation] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [organization] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
     const res = await request(app)
       .get('/games/2313/settings')
@@ -45,7 +45,7 @@ describe('Game service - settings', () => {
   })
 
   it('should not return settings for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.OWNER })
 
     const res = await request(app)

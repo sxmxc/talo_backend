@@ -3,8 +3,8 @@ import { PolicyResponse } from 'koa-clay'
 import { UserType } from '../entities/user'
 import UserTypeGate from './user-type-gate'
 
-export default class OrganisationPolicy extends Policy {
-  @UserTypeGate([UserType.ADMIN], 'view organisation info')
+export default class OrganizationPolicy extends Policy {
+  @UserTypeGate([UserType.ADMIN], 'view organization info')
   async current(): Promise<PolicyResponse> {
     return true
   }

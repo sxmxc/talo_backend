@@ -2,7 +2,7 @@ import request from 'supertest'
 import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
 import { LeaderboardSortMode } from '../../../src/entities/leaderboard'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import LeaderboardEntryFactory from '../../fixtures/LeaderboardEntryFactory'
@@ -18,8 +18,8 @@ describe('Leaderboard service - update leaderboard', () => {
   })
 
   it('should update a leaderboard\'s name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     await em.persistAndFlush(leaderboard)
@@ -44,8 +44,8 @@ describe('Leaderboard service - update leaderboard', () => {
   })
 
   it('should update a leaderboard\'s sort mode', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).desc().one()
     await em.persistAndFlush(leaderboard)
@@ -60,8 +60,8 @@ describe('Leaderboard service - update leaderboard', () => {
   })
 
   it('should update a leaderboard\'s entry uniqueness mode', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).unique().one()
     await em.persistAndFlush(leaderboard)
@@ -76,8 +76,8 @@ describe('Leaderboard service - update leaderboard', () => {
   })
 
   it('should not update a non-existent leaderboard', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .put(`/games/${game.id}/leaderboards/21312321`)
@@ -89,8 +89,8 @@ describe('Leaderboard service - update leaderboard', () => {
   })
 
   it('should archive entries when changing refresh interval from never', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     const player = await new PlayerFactory([game]).one()

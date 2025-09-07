@@ -1,15 +1,15 @@
 import request from 'supertest'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
 import PlayerAuthActivityFactory from '../../fixtures/PlayerAuthActivityFactory'
 
 describe('Player service - get auth activities', () => {
   it.each(userPermissionProvider([UserType.ADMIN]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const player = await new PlayerFactory([game]).withTaloAlias().one()
     const activities = await new PlayerAuthActivityFactory(game).state(() => ({ player })).many(10)
@@ -29,7 +29,7 @@ describe('Player service - get auth activities', () => {
   })
 
   it('should not get a player\'s auth activities for a player they have no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const player = await new PlayerFactory([game]).one()
@@ -43,8 +43,8 @@ describe('Player service - get auth activities', () => {
   })
 
   it('should not get a player\'s auth activities if they do not exist', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/players/21312321321/auth-activities`)
@@ -55,8 +55,8 @@ describe('Player service - get auth activities', () => {
   })
 
   it('should not return a player\'s auth activities if they do not have a talo alias', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const player = await new PlayerFactory([game]).withUsernameAlias().one()
     const activities = await new PlayerAuthActivityFactory(game).state(() => ({ player })).many(10)

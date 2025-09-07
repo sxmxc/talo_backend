@@ -1,13 +1,13 @@
 import { format } from 'date-fns'
 import Stripe from 'stripe'
-import Organisation from '../entities/organisation'
+import Organization from '../entities/organization'
 import Mail from './mail'
 import { USD } from '@dinero.js/currencies'
 import { dinero, toDecimal } from 'dinero.js'
 
 export default class PlanInvoice extends Mail {
-  constructor(organisation: Organisation, invoice: Stripe.Invoice) {
-    super(organisation.email, 'Your invoice is ready', '')
+  constructor(organization: Organization, invoice: Stripe.Invoice) {
+    super(organization.email, 'Your invoice is ready', '')
 
     this.title = 'Thanks for using Talo!'
     this.mainText = `Your ${format(new Date(), 'MMMM yyyy')} invoice is ready.<br/><br/>The balance due is: <strong>${this.getPrice(invoice.amount_due)}</strong>.<br/><br/>The balance will be automatically charged to your card so you don't need to do anything.`

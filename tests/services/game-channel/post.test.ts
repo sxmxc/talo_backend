@@ -1,13 +1,13 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 
 describe('Game channel service - post', () => {
   it('should create a game channel', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-channels`)
@@ -25,7 +25,7 @@ describe('Game channel service - post', () => {
   })
 
   it('should not create a game channel for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)
@@ -50,8 +50,8 @@ describe('Game channel service - post', () => {
   })
 
   it('should set owner when ownerAliasId is provided', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -65,8 +65,8 @@ describe('Game channel service - post', () => {
   })
 
   it('should not create channel with non-existent ownerAliasId', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-channels`)

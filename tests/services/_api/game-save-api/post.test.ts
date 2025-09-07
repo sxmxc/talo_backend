@@ -2,7 +2,7 @@ import request from 'supertest'
 import { APIKeyScope } from '../../../../src/entities/api-key'
 import PlayerFactory from '../../../fixtures/PlayerFactory'
 import createAPIKeyAndToken from '../../../utils/createAPIKeyAndToken'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 import { randText } from '@ngneat/falso'
 
 describe('Game save API service - post', () => {
@@ -47,7 +47,7 @@ describe('Game save API service - post', () => {
 
   it('should not create a game save for a player from another game', async () => {
     const [, token] = await createAPIKeyAndToken([])
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const otherPlayer = await new PlayerFactory([game]).one()
 
     await em.persistAndFlush(otherPlayer)

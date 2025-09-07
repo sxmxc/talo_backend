@@ -1,13 +1,13 @@
 import request from 'supertest'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import PlayerGroupRule, { PlayerGroupRuleName, PlayerGroupRuleCastType } from '../../../src/entities/player-group-rule'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 
 describe('Player group service - preview count', () => {
   it('should return a preview for the number of players in a group', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).state(() => ({ lastSeenAt: new Date(2022, 4, 3) })).one()
     await em.persistAndFlush(player)
@@ -32,8 +32,8 @@ describe('Player group service - preview count', () => {
   })
 
   it('should not return dev build players in the group members without the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().state(() => ({ lastSeenAt: new Date(2022, 4, 3) })).one()
     await em.persistAndFlush(player)
@@ -58,8 +58,8 @@ describe('Player group service - preview count', () => {
   })
 
   it('should return dev build players in the group members with the dev data header', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     const player = await new PlayerFactory([game]).devBuild().state(() => ({ lastSeenAt: new Date(2022, 4, 3) })).one()
     await em.persistAndFlush(player)
@@ -99,7 +99,7 @@ describe('Player group service - preview count', () => {
   })
 
   it('should not return a preview for a game the user has no access to', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const rules: Partial<PlayerGroupRule>[] = []

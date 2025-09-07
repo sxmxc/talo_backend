@@ -5,7 +5,7 @@ import createUserAndToken from '../../../utils/createUserAndToken'
 import UserTwoFactorAuth from '../../../../src/entities/user-two-factor-auth'
 import User from '../../../../src/entities/user'
 import generateRecoveryCodes from '../../../../src/lib/auth/generateRecoveryCodes'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 
 async function setTwoFactorAuthSession(user: User) {
   await redis.set(`2fa:${user.id}`, 'true')
@@ -16,10 +16,10 @@ async function removeTwoFactorAuthSession(user: User) {
 }
 
 async function createUserWithTwoFactorAuth(em: EntityManager): Promise<[string, User]> {
-  const [organisation] = await createOrganisationAndGame()
+  const [organization] = await createOrganizationAndGame()
   const [token, user] = await createUserAndToken({
     twoFactorAuth: new UserTwoFactorAuth('blah')
-  }, organisation)
+  }, organization)
 
   user.twoFactorAuth!.enabled = true
   user.recoveryCodes = new Collection<UserRecoveryCode>(user, generateRecoveryCodes(user))
@@ -40,8 +40,8 @@ describe('User public service - use recovery code', () => {
       .expect(200)
 
     expect(res.body.user).toBeTruthy()
-    expect(res.body.user.organisation).toBeTruthy()
-    expect(res.body.user.organisation.games).toHaveLength(1)
+    expect(res.body.user.organization).toBeTruthy()
+    expect(res.body.user.organization.games).toHaveLength(1)
 
     expect(res.body.accessToken).toBeTruthy()
     expect(res.body.newRecoveryCodes).toBeUndefined()

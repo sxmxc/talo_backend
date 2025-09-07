@@ -1,9 +1,9 @@
 import { Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/mysql'
 import Game from './game'
-import OrganisationPricingPlan from './organisation-pricing-plan'
+import OrganizationPricingPlan from './organization-pricing-plan'
 
 @Entity()
-export default class Organisation {
+export default class Organization {
   @PrimaryKey()
   id!: number
 
@@ -13,11 +13,11 @@ export default class Organisation {
   @Property()
   name!: string
 
-  @OneToMany(() => Game, (game) => game.organisation)
+  @OneToMany(() => Game, (game) => game.organization)
   games = new Collection<Game>(this)
 
   @OneToOne({ orphanRemoval: true, eager: true })
-  pricingPlan!: OrganisationPricingPlan
+  pricingPlan!: OrganizationPricingPlan
 
   @Property()
   createdAt: Date = new Date()

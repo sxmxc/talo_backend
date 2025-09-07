@@ -107,8 +107,8 @@ export async function generateDemoEvents(req: Request): Promise<void> {
   const clickhouse: ClickHouseClient = req.ctx.clickhouse
 
   const games = await em.getRepository(Game).find({
-    organisation: {
-      name: process.env.DEMO_ORGANISATION_NAME
+    organization: {
+      name: process.env.DEMO_ORGANIZATION_NAME
     }
   })
 

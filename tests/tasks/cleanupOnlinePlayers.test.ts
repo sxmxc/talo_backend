@@ -1,7 +1,7 @@
 import { addHours, addMinutes, isToday, subDays, subMinutes } from 'date-fns'
 import cleanupOnlinePlayers from '../../src/tasks/cleanupOnlinePlayers'
 import PlayerFactory from '../fixtures/PlayerFactory'
-import createOrganisationAndGame from '../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../utils/createOrganizationAndGame'
 import PlayerSession, { ClickHousePlayerSession } from '../../src/entities/player-session'
 import { formatDateForClickHouse } from '../../src/lib/clickhouse/formatDateTime'
 import PlayerPresenceFactory from '../fixtures/PlayerPresenceFactory'
@@ -20,7 +20,7 @@ describe('cleanupOnlinePlayers', () => {
   })
 
   it('should remove an unfinished session if a close event is found', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -68,7 +68,7 @@ describe('cleanupOnlinePlayers', () => {
   })
 
   it('should use the latest event if a close event is not found to use as the end time', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -116,7 +116,7 @@ describe('cleanupOnlinePlayers', () => {
   })
 
   it('should add a minute to the started_at if there are no events for the session', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -148,7 +148,7 @@ describe('cleanupOnlinePlayers', () => {
   })
 
   it('should not use events from any newer sessions', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -204,7 +204,7 @@ describe('cleanupOnlinePlayers', () => {
   })
 
   it('should not use events that were created before the session', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -253,7 +253,7 @@ describe('cleanupOnlinePlayers', () => {
   })
 
   it('should not allow the session length to be less than a minute', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game]).one()
     await em.persistAndFlush(player)
 
@@ -303,7 +303,7 @@ describe('cleanupOnlinePlayers', () => {
   it('should set presence to offline if the latest session ended after the presence was updated', async () => {
     vi.useRealTimers()
 
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game])
       .state(async (player) => ({
         presence: await new PlayerPresenceFactory(player.game)
@@ -334,7 +334,7 @@ describe('cleanupOnlinePlayers', () => {
   it('does not set presence to offline if the latest session ended before the presence was updated', async () => {
     vi.useRealTimers()
 
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game])
       .state(async (player) => ({
         presence: await new PlayerPresenceFactory(player.game)
@@ -364,7 +364,7 @@ describe('cleanupOnlinePlayers', () => {
   it('should not update presence if no sessions are found', async () => {
     vi.useRealTimers()
 
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game])
       .state(async (player) => ({
         presence: await new PlayerPresenceFactory(player.game)
@@ -392,7 +392,7 @@ describe('cleanupOnlinePlayers', () => {
   it('should delete presence that no longer has a player', async () => {
     vi.useRealTimers()
 
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
     const player = await new PlayerFactory([game])
       .state(async (player) => ({
         presence: await new PlayerPresenceFactory(player.game)

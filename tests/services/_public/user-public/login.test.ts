@@ -1,13 +1,13 @@
 import request from 'supertest'
 import UserFactory from '../../../fixtures/UserFactory'
 import { differenceInMinutes, sub } from 'date-fns'
-import createOrganisationAndGame from '../../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../../utils/createOrganizationAndGame'
 
 describe('User public service - login', () => {
   it('should let a user login', async () => {
-    const [organisation] = await createOrganisationAndGame()
+    const [organization] = await createOrganizationAndGame()
     const user = await new UserFactory().loginable().state(() => ({
-      organisation,
+      organization,
       lastSeenAt: new Date(2020, 1, 1)
     })).one()
     await em.persistAndFlush(user)
@@ -19,8 +19,8 @@ describe('User public service - login', () => {
 
     expect(res.body.accessToken).toBeTruthy()
     expect(res.body.user).toBeTruthy()
-    expect(res.body.user.organisation).toBeTruthy()
-    expect(res.body.user.organisation.games).toHaveLength(1)
+    expect(res.body.user.organization).toBeTruthy()
+    expect(res.body.user.organization.games).toHaveLength(1)
     expect(new Date(res.body.user.lastSeenAt).getDay()).toEqual(new Date().getDay())
   })
 

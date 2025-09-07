@@ -3,7 +3,7 @@ import UserPinnedGroup from '../../src/entities/user-pinned-group'
 import UserFactory from './UserFactory'
 import PlayerGroupFactory from './PlayerGroupFactory'
 import GameFactory from './GameFactory'
-import OrganisationFactory from './OrganisationFactory'
+import OrganizationFactory from './OrganizationFactory'
 
 export default class UserPinnedGroupFactory extends Factory<UserPinnedGroup> {
   constructor() {
@@ -12,11 +12,11 @@ export default class UserPinnedGroupFactory extends Factory<UserPinnedGroup> {
 
   protected definition(): void {
     this.state(async () => {
-      const organisation = await new OrganisationFactory().one()
-      const game = await new GameFactory(organisation).one()
+      const organization = await new OrganizationFactory().one()
+      const game = await new GameFactory(organization).one()
 
       return {
-        user: await new UserFactory().state(() => ({ organisation })).one(),
+        user: await new UserFactory().state(() => ({ organization })).one(),
         group: await new PlayerGroupFactory().state(() => ({ game })).one()
       }
     })

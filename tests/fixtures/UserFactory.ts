@@ -1,7 +1,7 @@
 import { Factory } from 'hefty'
 import User, { UserType } from '../../src/entities/user'
 import bcrypt from 'bcrypt'
-import OrganisationFactory from './OrganisationFactory'
+import OrganizationFactory from './OrganizationFactory'
 import UserTwoFactorAuth from '../../src/entities/user-two-factor-auth'
 import UserRecoveryCode from '../../src/entities/user-recovery-code'
 import generateRecoveryCodes from '../../src/lib/auth/generateRecoveryCodes'
@@ -18,7 +18,7 @@ export default class UserFactory extends Factory<User> {
       email: randEmail(),
       username: randUserName(),
       password: '',
-      organisation: await new OrganisationFactory().one(),
+      organization: await new OrganizationFactory().one(),
       type: UserType.DEV
     }))
   }

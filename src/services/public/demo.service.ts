@@ -2,7 +2,7 @@ import { After, Before, Service, Request, Response, Route } from 'koa-clay'
 import User, { UserType } from '../../entities/user'
 import { EntityManager } from '@mikro-orm/mysql'
 import buildTokenPair from '../../lib/auth/buildTokenPair'
-import Organisation from '../../entities/organisation'
+import Organization from '../../entities/organization'
 import createQueue from '../../lib/queues/createQueue'
 import UserSession from '../../entities/user-session'
 import bcrypt from 'bcrypt'
@@ -54,7 +54,7 @@ export default class DemoService extends Service {
     user.username = `demo+${Date.now()}`
     user.email = `${user.username}@demo.io`
     user.type = UserType.DEMO
-    user.organisation = await em.getRepository(Organisation).findOneOrFail({ name: process.env.DEMO_ORGANISATION_NAME })
+    user.organization = await em.getRepository(Organization).findOneOrFail({ name: process.env.DEMO_ORGANIZATION_NAME })
     user.emailConfirmed = true
     user.password = await bcrypt.hash(user.email, 10)
 

@@ -1,11 +1,11 @@
 import request from 'supertest'
 import initStripe from '../../../src/lib/billing/initStripe'
 import PricingPlanFactory from '../../fixtures/PricingPlanFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
-import OrganisationPricingPlanFactory from '../../fixtures/OrganisationPricingPlanFactory'
+import OrganizationPricingPlanFactory from '../../fixtures/OrganizationPricingPlanFactory'
 import PlayerFactory from '../../fixtures/PlayerFactory'
 
 const stripe = initStripe()!
@@ -16,11 +16,11 @@ describe('Billing service - create checkout session', () => {
     const price = (await stripe.prices.list({ product: product.id })).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({ type }, organization)
 
-    organisation.pricingPlan.stripeCustomerId = null
-    organisation.pricingPlan.stripePriceId = null
+    organization.pricingPlan.stripeCustomerId = null
+    organization.pricingPlan.stripePriceId = null
     await em.flush()
 
     const res = await request(app)
@@ -33,12 +33,12 @@ describe('Billing service - create checkout session', () => {
       .expect(statusCode)
 
     if (statusCode === 200) {
-      await em.refresh(organisation)
-      expect(typeof organisation.pricingPlan.stripeCustomerId).toBe('string')
+      await em.refresh(organization)
+      expect(typeof organization.pricingPlan.stripeCustomerId).toBe('string')
 
       expect(res.body.redirect).toBeDefined()
     } else {
-      expect(res.body).toStrictEqual({ message: 'You do not have permissions to update the organisation pricing plan' })
+      expect(res.body).toStrictEqual({ message: 'You do not have permissions to update the organization pricing plan' })
     }
   })
 
@@ -57,18 +57,18 @@ describe('Billing service - create checkout session', () => {
     expect(res.body).toStrictEqual({ message: 'Pricing plan not found' })
   })
 
-  it('should create an invoice preview if the organisation already has a subscription', async () => {
+  it('should create an invoice preview if the organization already has a subscription', async () => {
     const product = (await stripe.products.list()).data[0]
     const price = (await stripe.prices.list({ product: product.id })).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
     const subscription = (await stripe.subscriptions.list()).data[0]
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    organisation.pricingPlan.stripeCustomerId = subscription.customer as string
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    organization.pricingPlan.stripeCustomerId = subscription.customer as string
     await em.flush()
 
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
     const res = await request(app)
       .post('/billing/checkout-session')
@@ -82,13 +82,13 @@ describe('Billing service - create checkout session', () => {
     expect(res.body.invoice).toBeDefined()
   })
 
-  it('should not create an invoice preview if the organisation has a stripeCustomerId but no subscriptions', async () => {
+  it('should not create an invoice preview if the organization has a stripeCustomerId but no subscriptions', async () => {
     const product = (await stripe.products.list()).data[0]
     const price = (await stripe.prices.list({ product: product.id })).data[0]
     const plan = await new PricingPlanFactory().state(() => ({ stripeId: product.id })).one()
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
     const res = await request(app)
       .post('/billing/checkout-session')
@@ -104,15 +104,15 @@ describe('Billing service - create checkout session', () => {
 
   it('should not preview a plan if they are over their current plan player limit', async () => {
     const plan = await new PricingPlanFactory().state(() => ({ playerLimit: 10 })).one()
-    const orgPlan = await new OrganisationPricingPlanFactory().state(() => ({ pricingPlan: plan })).one()
+    const orgPlan = await new OrganizationPricingPlanFactory().state(() => ({ pricingPlan: plan })).one()
 
-    const [organisation] = await createOrganisationAndGame({ pricingPlan: orgPlan })
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [organization] = await createOrganizationAndGame({ pricingPlan: orgPlan })
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
-    const games = await orgPlan.organisation.games.loadItems()
+    const games = await orgPlan.organization.games.loadItems()
     const players = await new PlayerFactory(games).many(10)
 
-    await em.persistAndFlush([organisation, ...players])
+    await em.persistAndFlush([organization, ...players])
 
     const res = await request(app)
       .post('/billing/checkout-session')
@@ -123,7 +123,7 @@ describe('Billing service - create checkout session', () => {
       .auth(token, { type: 'bearer' })
       .expect(400)
 
-    expect(res.body).toStrictEqual({ message: 'You cannot downgrade your plan because your organisation has reached its player limit.' })
+    expect(res.body).toStrictEqual({ message: 'You cannot downgrade your plan because your organization has reached its player limit.' })
   })
 
   it('should preview a plan if the current plan has a null player limit', async () => {
@@ -133,11 +133,11 @@ describe('Billing service - create checkout session', () => {
 
     const subscription = (await stripe.subscriptions.list()).data[0]
 
-    const [organisation] = await createOrganisationAndGame({}, {}, plan)
-    organisation.pricingPlan.stripeCustomerId = subscription.customer as string
+    const [organization] = await createOrganizationAndGame({}, {}, plan)
+    organization.pricingPlan.stripeCustomerId = subscription.customer as string
     await em.flush()
 
-    const [token] = await createUserAndToken({ type: UserType.OWNER }, organisation)
+    const [token] = await createUserAndToken({ type: UserType.OWNER }, organization)
 
     const res = await request(app)
       .post('/billing/checkout-session')

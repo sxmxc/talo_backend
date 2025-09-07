@@ -1,13 +1,13 @@
 import request from 'supertest'
 import DataExportFactory from '../../fixtures/DataExportFactory'
 import { UserType } from '../../../src/entities/user'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import createUserAndToken from '../../utils/createUserAndToken'
 
 describe('Data export service - index', () => {
   it('should return a list of data exports', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN, emailConfirmed: true }, organization)
 
     const exports = await new DataExportFactory(game).many(5)
     await em.persistAndFlush(exports)
@@ -21,8 +21,8 @@ describe('Data export service - index', () => {
   })
 
   it('should not return data exports for dev users', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.DEV, emailConfirmed: true }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.DEV, emailConfirmed: true }, organization)
 
     const res = await request(app)
       .get(`/games/${game.id}/data-exports`)

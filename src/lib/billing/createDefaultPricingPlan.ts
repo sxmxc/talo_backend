@@ -1,10 +1,10 @@
 import { EntityManager } from '@mikro-orm/mysql'
-import Organisation from '../../entities/organisation'
-import OrganisationPricingPlan from '../../entities/organisation-pricing-plan'
+import Organization from '../../entities/organization'
+import OrganizationPricingPlan from '../../entities/organization-pricing-plan'
 import PricingPlan from '../../entities/pricing-plan'
 import initStripe from './initStripe'
 
-export default async function createDefaultPricingPlan(em: EntityManager, organisation: Organisation): Promise<OrganisationPricingPlan> {
+export default async function createDefaultPricingPlan(em: EntityManager, organization: Organization): Promise<OrganizationPricingPlan> {
   const stripe = initStripe()
 
   let defaultPlan = await em.getRepository(PricingPlan).findOne({ default: true })
@@ -20,15 +20,15 @@ export default async function createDefaultPricingPlan(em: EntityManager, organi
     defaultPlan.default = true
   }
 
-  if (!organisation.pricingPlan) {
-    const organisationPricingPlan = new OrganisationPricingPlan(organisation, defaultPlan)
-    organisationPricingPlan.stripePriceId = price!
-    return organisationPricingPlan
+  if (!organization.pricingPlan) {
+    const organizationPricingPlan = new OrganizationPricingPlan(organization, defaultPlan)
+    organizationPricingPlan.stripePriceId = price!
+    return organizationPricingPlan
   } else {
-    organisation.pricingPlan.pricingPlan = defaultPlan
-    organisation.pricingPlan.status = 'active'
-    organisation.pricingPlan.stripePriceId = price!
-    organisation.pricingPlan.endDate = null
-    return organisation.pricingPlan
+    organization.pricingPlan.pricingPlan = defaultPlan
+    organization.pricingPlan.status = 'active'
+    organization.pricingPlan.stripePriceId = price!
+    organization.pricingPlan.endDate = null
+    return organization.pricingPlan
   }
 }

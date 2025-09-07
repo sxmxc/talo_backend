@@ -99,7 +99,7 @@ export default class GameActivity {
       case GameActivityType.INVITE_CREATED:
         return `${this.user.username} created an invite for ${this.extra.inviteEmail}`
       case GameActivityType.INVITE_ACCEPTED:
-        return `${this.user.username} joined the organisation`
+        return `${this.user.username} joined the organization`
       case GameActivityType.DATA_EXPORT_REQUESTED:
         return `${this.user.username} requested a data export`
       case GameActivityType.GAME_INTEGRATION_ADDED:

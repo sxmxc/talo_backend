@@ -1,6 +1,6 @@
 import { Collection, Embedded, Entity, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/mysql'
 import GameSecret from './game-secret'
-import Organisation from './organisation'
+import Organization from './organization'
 import Player from './player'
 import Prop from './prop'
 
@@ -12,8 +12,8 @@ export default class Game {
   @Property()
   name: string
 
-  @ManyToOne(() => Organisation)
-  organisation: Organisation
+  @ManyToOne(() => Organization)
+  organization: Organization
 
   @Embedded(() => Prop, { array: true })
   props: Prop[] = []
@@ -45,9 +45,9 @@ export default class Game {
   @Property({ onUpdate: () => new Date() })
   updatedAt: Date = new Date()
 
-  constructor(name: string, organisation: Organisation) {
+  constructor(name: string, organization: Organization) {
     this.name = name
-    this.organisation = organisation
+    this.organization = organization
   }
 
   static getLiveConfigCacheKey(game: Game) {

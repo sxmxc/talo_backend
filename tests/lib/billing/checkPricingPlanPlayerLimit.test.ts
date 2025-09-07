@@ -1,5 +1,5 @@
 import PlayerFactory from '../../fixtures/PlayerFactory'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import PlanUsageWarning from '../../../src/emails/plan-usage-warning-mail'
 import request from 'supertest'
 import createUserAndToken from '../../utils/createUserAndToken'
@@ -13,10 +13,10 @@ describe('checkPricingPlanPlayerLimit', () => {
   })
 
   it('should allow creation when under the limit', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.pricingPlan.playerLimit = 100
-    organisation.pricingPlan.status = 'active'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.pricingPlan.playerLimit = 100
+    organization.pricingPlan.status = 'active'
 
     const players = await new PlayerFactory([game]).many(10)
     await em.persistAndFlush(players)
@@ -31,9 +31,9 @@ describe('checkPricingPlanPlayerLimit', () => {
   })
 
   it('should throw a 402 when subscription status is not active', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.status = 'incomplete'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.status = 'incomplete'
     await em.flush()
 
     const res = await request(app)
@@ -47,10 +47,10 @@ describe('checkPricingPlanPlayerLimit', () => {
   })
 
   it('should send an email at 75% usage', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.pricingPlan.playerLimit = 100
-    organisation.pricingPlan.status = 'active'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.pricingPlan.playerLimit = 100
+    organization.pricingPlan.status = 'active'
 
     const players = await new PlayerFactory([game]).many(74)
     await em.persistAndFlush(players)
@@ -61,14 +61,14 @@ describe('checkPricingPlanPlayerLimit', () => {
       .expect(200)
 
     expect(res.body.player).toBeTruthy()
-    expect(sendMock).toHaveBeenCalledWith(new PlanUsageWarning(organisation, 75, 100).getConfig())
+    expect(sendMock).toHaveBeenCalledWith(new PlanUsageWarning(organization, 75, 100).getConfig())
   })
 
   it('should send an email at 90% usage', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.pricingPlan.playerLimit = 100
-    organisation.pricingPlan.status = 'active'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.pricingPlan.playerLimit = 100
+    organization.pricingPlan.status = 'active'
 
     const players = await new PlayerFactory([game]).many(89)
     await em.persistAndFlush(players)
@@ -79,14 +79,14 @@ describe('checkPricingPlanPlayerLimit', () => {
       .expect(200)
 
     expect(res.body.player).toBeTruthy()
-    expect(sendMock).toHaveBeenCalledWith(new PlanUsageWarning(organisation, 90, 100).getConfig())
+    expect(sendMock).toHaveBeenCalledWith(new PlanUsageWarning(organization, 90, 100).getConfig())
   })
 
   it('should send an email at 100% usage', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.pricingPlan.playerLimit = 100
-    organisation.pricingPlan.status = 'active'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.pricingPlan.playerLimit = 100
+    organization.pricingPlan.status = 'active'
 
     const players = await new PlayerFactory([game]).many(99)
     await em.persistAndFlush(players)
@@ -97,14 +97,14 @@ describe('checkPricingPlanPlayerLimit', () => {
       .expect(200)
 
     expect(res.body.player).toBeTruthy()
-    expect(sendMock).toHaveBeenCalledWith(new PlanUsageWarning(organisation, 100, 100).getConfig())
+    expect(sendMock).toHaveBeenCalledWith(new PlanUsageWarning(organization, 100, 100).getConfig())
   })
 
   it('should not send an email below 75% usage', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.pricingPlan.playerLimit = 100
-    organisation.pricingPlan.status = 'active'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.pricingPlan.playerLimit = 100
+    organization.pricingPlan.status = 'active'
 
     const randomPlayerCount = Math.floor(Math.random() * 74) + 1
     const players = await new PlayerFactory([game]).many(randomPlayerCount - 1)
@@ -120,10 +120,10 @@ describe('checkPricingPlanPlayerLimit', () => {
   })
 
   it('should allow player creation when playerLimit is null', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
-    organisation.pricingPlan.pricingPlan.playerLimit = null
-    organisation.pricingPlan.status = 'active'
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
+    organization.pricingPlan.pricingPlan.playerLimit = null
+    organization.pricingPlan.status = 'active'
 
     const players = await new PlayerFactory([game]).many(100)
     await em.persistAndFlush(players)

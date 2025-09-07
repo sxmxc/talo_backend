@@ -4,14 +4,14 @@ import LeaderboardFactory from '../../fixtures/LeaderboardFactory'
 import GameActivity, { GameActivityType } from '../../../src/entities/game-activity'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 
 describe('Leaderboard service - delete', () => {
   it.each(userPermissionProvider([
     UserType.ADMIN
   ], 204))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const leaderboard = await new LeaderboardFactory([game]).one()
     await em.persistAndFlush(leaderboard)
@@ -36,7 +36,7 @@ describe('Leaderboard service - delete', () => {
   })
 
   it('should not delete a leaderboard for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
     const leaderboard = await new LeaderboardFactory([otherGame]).one()
@@ -51,8 +51,8 @@ describe('Leaderboard service - delete', () => {
   })
 
   it('should not delete a non-existent leaderboard', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const res = await request(app)
       .delete(`/games/${game.id}/leaderboards/31223`)

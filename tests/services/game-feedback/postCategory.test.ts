@@ -1,6 +1,6 @@
 import request from 'supertest'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import GameFeedbackCategoryFactory from '../../fixtures/GameFeedbackCategoryFactory'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 import { UserType } from '../../../src/entities/user'
@@ -11,8 +11,8 @@ describe('Game feedback service - post category', () => {
     UserType.ADMIN,
     UserType.DEV
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type }, organization)
 
     const res = await request(app)
       .post(`/games/${game.id}/game-feedback/categories`)
@@ -40,7 +40,7 @@ describe('Game feedback service - post category', () => {
   })
 
   it('should not create a feedback category for a game the user has no access to', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
+    const [, otherGame] = await createOrganizationAndGame()
     const [token] = await createUserAndToken()
 
     const res = await request(app)
@@ -65,8 +65,8 @@ describe('Game feedback service - post category', () => {
   })
 
   it('should not create a feedback category with a duplicate internal name', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({ type: UserType.ADMIN }, organization)
 
     const category = await new GameFeedbackCategoryFactory(game).state(() => ({ internalName: 'bugs' })).one()
     await em.persistAndFlush(category)
@@ -85,9 +85,9 @@ describe('Game feedback service - post category', () => {
   })
 
   it('should create a feedback category with a duplicate internal name for another game', async () => {
-    const [, otherGame] = await createOrganisationAndGame()
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token] = await createUserAndToken({}, organisation)
+    const [, otherGame] = await createOrganizationAndGame()
+    const [organization, game] = await createOrganizationAndGame()
+    const [token] = await createUserAndToken({}, organization)
 
     await new GameFeedbackCategoryFactory(otherGame).state(() => ({ internalName: 'bugs' })).one()
 

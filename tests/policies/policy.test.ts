@@ -3,7 +3,7 @@ import UserFactory from '../fixtures/UserFactory'
 import request from 'supertest'
 import { genAccessToken } from '../../src/lib/auth/buildTokenPair'
 import createAPIKeyAndToken from '../utils/createAPIKeyAndToken'
-import createOrganisationAndGame from '../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../utils/createOrganizationAndGame'
 import PlayerFactory from '../fixtures/PlayerFactory'
 
 describe('Policy base class', () => {
@@ -20,9 +20,9 @@ describe('Policy base class', () => {
   })
 
   it('should reject a non-existent user', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
+    const [organization, game] = await createOrganizationAndGame()
 
-    const user = await new UserFactory().state(() => ({ organisation })).one()
+    const user = await new UserFactory().state(() => ({ organization })).one()
     await em.persistAndFlush(user)
 
     const token = await genAccessToken(user)

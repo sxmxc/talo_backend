@@ -3,13 +3,13 @@ import UserFactory from './fixtures/UserFactory'
 import GameFactory from './fixtures/GameFactory'
 import PlayerFactory from './fixtures/PlayerFactory'
 import EventFactory from './fixtures/EventFactory'
-import OrganisationFactory from './fixtures/OrganisationFactory'
+import OrganizationFactory from './fixtures/OrganizationFactory'
 import LeaderboardFactory from './fixtures/LeaderboardFactory'
 import GameSaveFactory from './fixtures/GameSaveFactory'
 import GameStatFactory from './fixtures/GameStatFactory'
 import PlayerGameStatFactory from './fixtures/PlayerGameStatFactory'
 import PricingPlanFactory from './fixtures/PricingPlanFactory'
-import OrganisationPricingPlanFactory from './fixtures/OrganisationPricingPlanFactory'
+import OrganizationPricingPlanFactory from './fixtures/OrganizationPricingPlanFactory'
 import PricingPlan from '../src/entities/pricing-plan'
 import APIKey, { APIKeyScope } from '../src/entities/api-key'
 import GameFeedbackCategoryFactory from './fixtures/GameFeedbackCategoryFactory'
@@ -36,10 +36,10 @@ import { MikroORM } from '@mikro-orm/mysql'
   ]
   const pricingPlans = await new PricingPlanFactory().state((_, idx) => plansMap[idx]).many(3)
 
-  const organisation = await new OrganisationFactory().state(async (organisation) => {
-    const orgPlan = await new OrganisationPricingPlanFactory()
+  const organization = await new OrganizationFactory().state(async (organization) => {
+    const orgPlan = await new OrganizationPricingPlanFactory()
       .state(() => ({
-        organisation,
+        organization,
         pricingPlan: pricingPlans[0],
         stripeCustomerId: null,
         stripePriceId: null
@@ -47,27 +47,27 @@ import { MikroORM } from '@mikro-orm/mysql'
       .one()
 
     return {
-      name: process.env.DEMO_ORGANISATION_NAME,
+      name: process.env.DEMO_ORGANIZATION_NAME,
       pricingPlan: orgPlan
     }
   }).one()
 
   const ownerUser = await new UserFactory().loginable().owner().emailConfirmed().state(() => ({
-    organisation,
+    organization,
     email: 'owner@trytalo.com'
   })).one()
 
   const adminUser = await new UserFactory().loginable().admin().emailConfirmed().state(() => ({
-    organisation,
+    organization,
     email: 'admin@trytalo.com'
   })).one()
 
   const devUser = await new UserFactory().loginable().emailConfirmed().state(() => ({
-    organisation,
+    organization,
     email: 'dev@trytalo.com'
   })).one()
 
-  const games = await new GameFactory(organisation).many(2)
+  const games = await new GameFactory(organization).many(2)
 
   const apiKeys = games.map((game) => {
     const apiKey = new APIKey(game, ownerUser)
@@ -116,7 +116,7 @@ import { MikroORM } from '@mikro-orm/mysql'
     ownerUser,
     adminUser,
     devUser,
-    organisation,
+    organization,
     ...games,
     ...apiKeys,
     ...players,

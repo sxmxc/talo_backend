@@ -1,6 +1,6 @@
 import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/mysql'
 import { Required, ValidationCondition } from 'koa-clay'
-import Organisation from './organisation'
+import Organization from './organization'
 import User, { UserType } from './user'
 
 @Entity()
@@ -24,8 +24,8 @@ export default class Invite {
   @Enum(() => UserType)
   type: UserType = UserType.DEV
 
-  @ManyToOne(() => Organisation)
-  organisation: Organisation
+  @ManyToOne(() => Organization)
+  organization: Organization
 
   @ManyToOne(() => User)
   invitedByUser!: User
@@ -33,8 +33,8 @@ export default class Invite {
   @Property()
   createdAt: Date = new Date()
 
-  constructor(organisation: Organisation) {
-    this.organisation = organisation
+  constructor(organization: Organization) {
+    this.organization = organization
   }
 
   generateToken(): string {
@@ -52,7 +52,7 @@ export default class Invite {
     return {
       id: this.id,
       email: this.email,
-      organisation: this.organisation,
+      organization: this.organization,
       type: this.type,
       invitedBy: this.invitedByUser.username,
       createdAt: this.createdAt

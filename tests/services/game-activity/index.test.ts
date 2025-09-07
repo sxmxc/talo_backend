@@ -3,7 +3,7 @@ import { UserType } from '../../../src/entities/user'
 import UserFactory from '../../fixtures/UserFactory'
 import GameActivityFactory from '../../fixtures/GameActivityFactory'
 import createUserAndToken from '../../utils/createUserAndToken'
-import createOrganisationAndGame from '../../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../../utils/createOrganizationAndGame'
 import userPermissionProvider from '../../utils/userPermissionProvider'
 
 describe('Game activity service - index', () => {
@@ -11,8 +11,8 @@ describe('Game activity service - index', () => {
     UserType.ADMIN,
     UserType.DEMO
   ]))('should return a %i for a %s user', async (statusCode, _, type) => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [token, user] = await createUserAndToken({ type }, organisation)
+    const [organization, game] = await createOrganizationAndGame()
+    const [token, user] = await createUserAndToken({ type }, organization)
 
     const activities = await new GameActivityFactory([game], [user]).many(5)
     await em.persistAndFlush([user, game, ...activities])
@@ -29,12 +29,12 @@ describe('Game activity service - index', () => {
     }
   })
 
-  it('should return game activities with no games but from the same organisation', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
-    const [otherOrg] = await createOrganisationAndGame()
+  it('should return game activities with no games but from the same organization', async () => {
+    const [organization, game] = await createOrganizationAndGame()
+    const [otherOrg] = await createOrganizationAndGame()
 
-    const [token, user] = await createUserAndToken({ type: UserType.ADMIN }, organisation)
-    const otherUser = await new UserFactory().state(() => ({ organisation: otherOrg })).one()
+    const [token, user] = await createUserAndToken({ type: UserType.ADMIN }, organization)
+    const otherUser = await new UserFactory().state(() => ({ organization: otherOrg })).one()
 
     const activities = await new GameActivityFactory([], [user]).many(5)
     const otherActivities = await new GameActivityFactory([], [otherUser]).many(5)
@@ -50,10 +50,10 @@ describe('Game activity service - index', () => {
   })
 
   it('should not return a list of game activities for a game the user has no access to', async () => {
-    const [organisation, game] = await createOrganisationAndGame()
+    const [organization, game] = await createOrganizationAndGame()
     const [token] = await createUserAndToken({ type: UserType.ADMIN })
 
-    const user = await new UserFactory().state(() => ({ organisation })).one()
+    const user = await new UserFactory().state(() => ({ organization })).one()
     const activities = await new GameActivityFactory([game], [user]).many(10)
     await em.persistAndFlush(activities)
 

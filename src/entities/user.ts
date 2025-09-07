@@ -1,5 +1,5 @@
 import { Collection, Entity, Enum, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/mysql'
-import Organisation from './organisation'
+import Organization from './organization'
 import UserRecoveryCode from './user-recovery-code'
 import UserTwoFactorAuth from './user-two-factor-auth'
 
@@ -24,8 +24,8 @@ export default class User {
   @Property({ hidden: true })
   password!: string
 
-  @ManyToOne(() => Organisation, { eager: true })
-  organisation!: Organisation
+  @ManyToOne(() => Organization, { eager: true })
+  organization!: Organization
 
   @Enum(() => UserType)
   type: UserType = UserType.DEV
@@ -55,7 +55,7 @@ export default class User {
       username: this.username,
       lastSeenAt: this.lastSeenAt,
       emailConfirmed: this.emailConfirmed,
-      organisation: this.organisation,
+      organization: this.organization,
       type: this.type,
       has2fa: this.twoFactorAuth?.enabled ?? false,
       createdAt: this.createdAt

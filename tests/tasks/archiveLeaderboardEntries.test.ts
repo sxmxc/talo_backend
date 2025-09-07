@@ -11,7 +11,7 @@ import axios from 'axios'
 import archiveLeaderboardEntries from '../../src/tasks/archiveLeaderboardEntries'
 import SteamworksLeaderboardMapping from '../../src/entities/steamworks-leaderboard-mapping'
 import { randNumber } from '@ngneat/falso'
-import createOrganisationAndGame from '../utils/createOrganisationAndGame'
+import createOrganizationAndGame from '../utils/createOrganizationAndGame'
 
 describe('archiveLeaderboardEntries', () => {
   const axiosMock = new AxiosMockAdapter(axios)
@@ -27,7 +27,7 @@ describe('archiveLeaderboardEntries', () => {
   })
 
   it('should archive daily entries older than today', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({
       refreshInterval: LeaderboardRefreshInterval.DAILY
@@ -53,7 +53,7 @@ describe('archiveLeaderboardEntries', () => {
   })
 
   it('should archive weekly entries from previous weeks', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({
       refreshInterval: LeaderboardRefreshInterval.WEEKLY
@@ -79,7 +79,7 @@ describe('archiveLeaderboardEntries', () => {
   })
 
   it('should archive monthly entries from previous months', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({
       refreshInterval: LeaderboardRefreshInterval.MONTHLY
@@ -105,7 +105,7 @@ describe('archiveLeaderboardEntries', () => {
   })
 
   it('should archive yearly entries from previous years', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({
       refreshInterval: LeaderboardRefreshInterval.YEARLY
@@ -131,7 +131,7 @@ describe('archiveLeaderboardEntries', () => {
   })
 
   it('should trigger steamworks integration when archiving entries', async () => {
-    const [, game] = await createOrganisationAndGame()
+    const [, game] = await createOrganizationAndGame()
 
     const leaderboard = await new LeaderboardFactory([game]).state(() => ({
       refreshInterval: LeaderboardRefreshInterval.DAILY

@@ -85,7 +85,7 @@ describe('Event API service - post', () => {
 
   it('should not create an event if the alias belongs to a player from another game', async () => {
     const [apiKey, token] = await createAPIKeyAndToken([APIKeyScope.WRITE_EVENTS])
-    const otherGame = await new GameFactory(apiKey.game.organisation).one()
+    const otherGame = await new GameFactory(apiKey.game.organization).one()
     const invalidPlayer = await new PlayerFactory([otherGame]).one()
     await em.persistAndFlush([invalidPlayer])
 

@@ -14,7 +14,7 @@ import APIKey from './api-key'
 import DataExport from './data-export'
 import FailedJob from './failed-job'
 import Game from './game'
-import Organisation from './organisation'
+import Organization from './organization'
 import Player from './player'
 import PlayerAlias from './player-alias'
 import Prop from './prop'
@@ -24,7 +24,7 @@ import UserSession from './user-session'
 import UserTwoFactorAuth from './user-two-factor-auth'
 import UserRecoveryCode from './user-recovery-code'
 import PricingPlan from './pricing-plan'
-import OrganisationPricingPlan from './organisation-pricing-plan'
+import OrganizationPricingPlan from './organization-pricing-plan'
 import Integration from './integration'
 import SteamworksIntegrationEvent from './steamworks-integration-event'
 import SteamworksLeaderboardMapping from './steamworks-leaderboard-mapping'
@@ -54,7 +54,7 @@ export default [
   SteamworksLeaderboardMapping,
   SteamworksIntegrationEvent,
   Integration,
-  OrganisationPricingPlan,
+  OrganizationPricingPlan,
   PricingPlan,
   Invite,
   PlayerGameStat,
@@ -69,7 +69,7 @@ export default [
   APIKey,
   Game,
   FailedJob,
-  Organisation,
+  Organization,
   PlayerAlias,
   Player,
   Prop,

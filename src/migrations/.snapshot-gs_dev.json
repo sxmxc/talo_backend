@@ -398,14 +398,14 @@
           "mappedType": "datetime"
         }
       },
-      "name": "organisation_pricing_plan",
+      "name": "organization_pricing_plan",
       "indexes": [
         {
           "columnNames": [
             "pricing_plan_id"
           ],
           "composite": false,
-          "keyName": "organisation_pricing_plan_pricing_plan_id_index",
+          "keyName": "organization_pricing_plan_pricing_plan_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -423,12 +423,12 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "organisation_pricing_plan_pricing_plan_id_foreign": {
-          "constraintName": "organisation_pricing_plan_pricing_plan_id_foreign",
+        "organization_pricing_plan_pricing_plan_id_foreign": {
+          "constraintName": "organization_pricing_plan_pricing_plan_id_foreign",
           "columnNames": [
             "pricing_plan_id"
           ],
-          "localTableName": "organisation_pricing_plan",
+          "localTableName": "organization_pricing_plan",
           "referencedColumnNames": [
             "id"
           ],
@@ -501,14 +501,14 @@
           "mappedType": "datetime"
         }
       },
-      "name": "organisation",
+      "name": "organization",
       "indexes": [
         {
           "columnNames": [
             "pricing_plan_id"
           ],
           "composite": false,
-          "keyName": "organisation_pricing_plan_id_unique",
+          "keyName": "organization_pricing_plan_id_unique",
           "constraint": true,
           "primary": false,
           "unique": true
@@ -526,16 +526,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "organisation_pricing_plan_id_foreign": {
-          "constraintName": "organisation_pricing_plan_id_foreign",
+        "organization_pricing_plan_id_foreign": {
+          "constraintName": "organization_pricing_plan_id_foreign",
           "columnNames": [
             "pricing_plan_id"
           ],
-          "localTableName": "organisation",
+          "localTableName": "organization",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "organisation_pricing_plan",
+          "referencedTableName": "organization_pricing_plan",
           "updateRule": "cascade"
         }
       },
@@ -563,8 +563,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "organisation_id": {
-          "name": "organisation_id",
+        "organization_id": {
+          "name": "organization_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -672,10 +672,10 @@
       "indexes": [
         {
           "columnNames": [
-            "organisation_id"
+            "organization_id"
           ],
           "composite": false,
-          "keyName": "game_organisation_id_index",
+          "keyName": "game_organization_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -703,16 +703,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "game_organisation_id_foreign": {
-          "constraintName": "game_organisation_id_foreign",
+        "game_organization_id_foreign": {
+          "constraintName": "game_organization_id_foreign",
           "columnNames": [
-            "organisation_id"
+            "organization_id"
           ],
           "localTableName": "game",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "organisation",
+          "referencedTableName": "organization",
           "updateRule": "cascade"
         },
         "game_api_secret_id_foreign": {
@@ -3691,8 +3691,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "organisation_id": {
-          "name": "organisation_id",
+        "organization_id": {
+          "name": "organization_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -3768,10 +3768,10 @@
       "indexes": [
         {
           "columnNames": [
-            "organisation_id"
+            "organization_id"
           ],
           "composite": false,
-          "keyName": "user_organisation_id_index",
+          "keyName": "user_organization_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -3799,16 +3799,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "user_organisation_id_foreign": {
-          "constraintName": "user_organisation_id_foreign",
+        "user_organization_id_foreign": {
+          "constraintName": "user_organization_id_foreign",
           "columnNames": [
-            "organisation_id"
+            "organization_id"
           ],
           "localTableName": "user",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "organisation",
+          "referencedTableName": "organization",
           "updateRule": "cascade"
         },
         "user_two_factor_auth_id_foreign": {
@@ -4265,8 +4265,8 @@
           "default": "2",
           "mappedType": "enum"
         },
-        "organisation_id": {
-          "name": "organisation_id",
+        "organization_id": {
+          "name": "organization_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -4300,10 +4300,10 @@
       "indexes": [
         {
           "columnNames": [
-            "organisation_id"
+            "organization_id"
           ],
           "composite": false,
-          "keyName": "invite_organisation_id_index",
+          "keyName": "invite_organization_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -4331,16 +4331,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "invite_organisation_id_foreign": {
-          "constraintName": "invite_organisation_id_foreign",
+        "invite_organization_id_foreign": {
+          "constraintName": "invite_organization_id_foreign",
           "columnNames": [
-            "organisation_id"
+            "organization_id"
           ],
           "localTableName": "invite",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "organisation",
+          "referencedTableName": "organization",
           "updateRule": "cascade"
         },
         "invite_invited_by_user_id_foreign": {
